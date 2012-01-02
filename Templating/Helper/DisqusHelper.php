@@ -33,7 +33,7 @@ class DisqusHelper extends Helper
     {
         $content = $this->disqus->fetch($name, $parameters);
 
-        return $this->templating->render($template, array('content' => $content) + $this->disqus->getParameters());
+        return $this->templating->render($template, array('content' => $content) + $parameters + $this->disqus->getParameters());
     }
 
     public function thread($name, array $parameters = array(), $template = 'KnpDisqusBundle::thread.html.php')

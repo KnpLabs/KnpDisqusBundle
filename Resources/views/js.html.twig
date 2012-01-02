@@ -2,16 +2,16 @@
     var disqus_shortname = '{{ shortname }}';
     var disqus_container_id = 'disqus_thread';
     var disqus_developer = {{ debug }};
-    {% if id.identifier is defined %}
+    {%- if id.identifier is defined %}
     var disqus_identifier = '{{ id.identifier }}';
-    {% elseif id.link is defined %}
+    {%- elseif id.link is defined %}
     var disqus_link = '{{ id.link }}';
-    {% else %}
+    {%- else %}
     var disqus_id = '{{ id.id }}';
-    {% endif %}
-    {% if url is defined %}
+    {%- endif %}
+    {%- if url is defined %}
     var disqus_url = '{{ url }}';
-    {% endif %}
+    {%- endif %}
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
