@@ -55,28 +55,13 @@ class Disqus
         $this->debug     = $debug;
     }
 
-    public function fetch($shortname, array $options, $what = 'threads/listPosts')
+    public function fetch($shortname, array $options, $fetch = 'threads/listPosts')
     {
         $this->shortname = $shortname;
 
         $options = $this->setOptions($options);
 
-        if (isset($options['identifier'])) {
-            $this->id = array('identifier' => $options['identifier']);
-            $id       = ':ident='.$options['identifier'];
-        } elseif (isset($options['link'])) {
-            $this->id = array('link' => $options['link']);
-            $id       = ':link='.$options['link'];
-        } elseif (isset($options['id'])) {
-            $this->id = array('id' => $options['id']);
-            $id       = '='.$options['id'];
-        }
-
-        if (!isset($id)) {
-            throw new \InvalidArgumentException();
-        }
-
-        $url = self::DISQUS_URL.$what.'.json?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
+        $url = $this->buildUrl($options, $fetch);
         if ($this->container->has('knp_zend_manager')) {
             $cache = $this->container->get('knp_zend_manager');
             $cache = $cache->getCache($this->container->getParameter('knp_disqus.cache.'.$shortname));
@@ -101,6 +86,27 @@ class Disqus
             'debug'      => $this->debug,
             'api_key'    => $this->apiKey
         );
+    }
+
+    protected function buildUrl($identifier, $fetch, $format = 'json')
+    {
+        if (isset($options['identifier'])) {
+            $this->id = array('identifier' => $options['identifier']);
+            $id       = ':ident='.$options['identifier'];
+        } elseif (isset($options['link'])) {
+            $this->id = array('link' => $options['link']);
+            $id       = ':link='.$options['link'];
+        } elseif (isset($options['id'])) {
+            $this->id = array('id' => $options['id']);
+            $id       = '='.$options['id'];
+        }
+
+        if (!isset($id)) {
+            throw new \InvalidArgumentException();
+        }
+
+        // @todo this should be more based on API docs (many params for many different fetch routes)
+        return self::DISQUS_URL.$fetch.'.'.$format.'?thread'.$identifier.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
     }
 
     protected function setOptions(array $options)

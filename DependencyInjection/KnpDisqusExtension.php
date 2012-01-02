@@ -24,10 +24,14 @@ class KnpDisqusExtension extends Extension
         $container->setParameter('knp_disqus.debug', array_key_exists('debug', $configs[0]) ? (bool)$configs[0]['debug'] : $container->getParameter('kernel.debug'));
 
         if ($container->hasParameter('knp_zend_cache')) {
-            foreach ($configs[0]['forums'] as $config) {
+            foreach ($configs[0]['forums'] as $shortname => $config) {
                 if (isset($config['cache'])) {
                     if (!$container->hasParameter('knp_zend_cache.templates.'.$config['cache'])) {
                         throw new \InvalidArgumentException('Unknown cache template key used: '.$config['cache']);
+                    }
+
+                    if (!isset($config['shortname'])) {
+                        $config['shortname'] = $shortname;
                     }
 
                     $container->setParameter('knp_disqus.cache.'.$config['shortname'], $config['cache']);
