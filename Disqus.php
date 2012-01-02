@@ -11,9 +11,8 @@
 
 namespace Knp\Bundle\DisqusBundle;
 
-use Buzz\Client\ClientInterface;
+use Buzz\Browser;
 use Buzz\Message\Request;
-use Buzz\Message\Response;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,10 +24,6 @@ class Disqus
      * @var \Symfony\Component\DependencyInjection\ContainerInterfac
      */
     protected $container;
-    /**
-     * @var \Buzz\Client\ClientInterface
-     */
-    protected $client;
 
     protected $apiKey;
     protected $shortname;
@@ -49,7 +44,6 @@ class Disqus
     public function __construct(ContainerInterface $container, $apiKey, $debug = 0)
     {
         $this->container = $container;
-        $this->client    = $container->get('buzz.client');
 
         $this->apiKey    = $apiKey;
         $this->debug     = $debug;
@@ -141,10 +135,9 @@ class Disqus
 
     protected function httpRequest($url, $method = Request::METHOD_GET)
     {
-        $request  = new Request($method, $url);
-        $response = new Response();
+        $buzz = new Browser();
 
-        $this->client->send($request, $response);
+        $response = $buzz->call($url, $method);
 
         return $response->getContent();
     }
