@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of the KnpDisqusBundle package.
+*
+* (c) KnpLabs <hello@knplabs.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Knp\Bundle\KnpDisqusBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -14,7 +23,7 @@ class DisqusExtension extends \Twig_Extension
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {

@@ -1,5 +1,14 @@
 <?php
 
+/*
+* This file is part of the KnpDisqusBundle package.
+*
+* (c) KnpLabs <hello@knplabs.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace Knp\Bundle\KnpDisqusBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -13,7 +22,7 @@ class KnpDisqusExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $container->setParameter('knp_disqus.api_key', $configs[0]['api_key']);
-        $container->setParameter('knp_disqus.debug', isset($configs[0]['debug']) ? $configs[0]['debug'] : $container->getParameter('kernel.debug'));
+        $container->setParameter('knp_disqus.debug', array_key_exists('debug', $configs[0]) ? (bool)$configs[0]['debug'] : $container->getParameter('kernel.debug'));
 
         $forums = array();
         foreach ($configs as $config) {
