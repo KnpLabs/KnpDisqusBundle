@@ -63,6 +63,6 @@ class DisqusExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'disqus';
+        return 'knp_disqus';
     }
 }

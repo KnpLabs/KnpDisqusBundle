@@ -1,7 +1,22 @@
-{% if content.response|length > 0 %}
-    <ul>
-        {% for comment in content.response %}
-            <li id="comment-{{ comment.id }}">{{ comment.message|raw }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
+<div id="disqus_thread">
+    {% if content.response|length > 0 %}
+    <div id="dsq-content">
+        <ul id="dsq-comments">
+            {% for comment in content.response %}
+                <li id="dsq-comment-{{ comment.id }}">
+                    <div id="dsq-comment-header-{{ comment.id }}" class="dsq-comment-header">
+                        <cite id="dsq-cite-{{ comment.id }}">
+                            <span id="dsq-author-user-{{ comment.id }}">{{ comment.author.name }}</span>
+                        </cite>
+                    </div>
+                    <div id="dsq-comment-body-{{ comment.id }}" class="dsq-comment-body">
+                        <div id="dsq-comment-message-{{ comment.id }}" class="dsq-comment-message">{{ comment.message|raw }}</div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+
+{% include 'KnpDisqusBundle::js.html.twig' %}

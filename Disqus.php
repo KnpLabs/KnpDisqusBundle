@@ -19,6 +19,8 @@ class Disqus
     protected $shortname;
     protected $debug;
 
+    protected $id;
+
     protected $options = array(
         'since'   => null,
         'cursor'  => null,
@@ -43,11 +45,14 @@ class Disqus
         $options = $this->setOptions($options);
 
         if (isset($options['identifier'])) {
-            $id = ':ident='.$options['identifier'];
+            $this->id = array('identifier' => $options['identifier']);
+            $id       = ':ident='.$options['identifier'];
         } elseif (isset($options['link'])) {
-            $id = ':link='.$options['link'];
+            $this->id = array('link' => $options['link']);
+            $id       = ':link='.$options['link'];
         } elseif (isset($options['id'])) {
-            $id = '='.$options['id'];
+            $this->id = array('id' => $options['id']);
+            $id       = '='.$options['id'];
         }
 
         if (!isset($id)) {
@@ -57,6 +62,16 @@ class Disqus
         $url = self::DISQUS_URL.$what.'.json?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
 
         return json_decode($this->httpRequest($url), true);
+    }
+
+    public function getParameters()
+    {
+        return array(
+            'id'         => $this->id,
+            'shortname'  => $this->shortname,
+            'debug'      => $this->debug,
+            'api_key'    => $this->apiKey
+        );
     }
 
     protected function setOptions(array $options)

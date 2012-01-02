@@ -56,11 +56,11 @@ class DisqusHelper extends Helper
 
     public function getName()
     {
-        return 'disqus';
+        return 'knp_disqus';
     }
 
     protected function renderTemplate($name, array $parameters)
     {
-        return $this->templating->render($name, $parameters);
+        return $this->templating->render($name, $parameters + $this->disqus->getParameters());
     }
 }
