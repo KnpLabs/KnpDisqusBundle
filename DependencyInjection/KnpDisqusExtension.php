@@ -12,15 +12,12 @@ class KnpDisqusExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $processor = new Processor();
-        $configuration = new Configuration($container->getParameter('kernel.debug'));
-        $config = $processor->processConfiguration($configuration, $configs);
+        $container->setParameter('knp_disqus.api_key', $configs[0]['api_key']);
+        $container->setParameter('knp_disqus.debug', isset($configs[0]['debug']) ? $configs[0]['debug'] : $container->getParameter('kernel.debug'));
 
-        $container->setParameter('knp_disqus.api_key', $config['api_key']);
-        $container->setParameter('knp_disqus.shortname', $config['shortname']);
-
-        if (isset($config['debug'])) {
-            $container->setParameter('knp_disqus.debug', $config['debug']);
+        $forums = array();
+        foreach ($configs as $config) {
+            $forums = array_merge($forums, $config['forums']);
         }
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

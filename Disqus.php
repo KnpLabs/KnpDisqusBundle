@@ -31,17 +31,18 @@ class Disqus
         'debug'   => 0,
     );
 
-    public function __construct(ClientInterface $client, $apiKey, $shortname, $debug = 0)
+    public function __construct(ClientInterface $client, $apiKey, $debug = 0)
     {
-        $this->client     = $client;
+        $this->client = $client;
 
-        $this->apiKey     = $apiKey;
-        $this->shortname  = $shortname;
-        $this->debug      = $debug;
+        $this->apiKey = $apiKey;
+        $this->debug  = $debug;
     }
 
-    public function fetch(array $options, $what = 'threads/listPosts')
+    public function fetch($shortname, array $options, $what = 'threads/listPosts')
     {
+        $this->shortname = $shortname;
+
         $options = $this->setOptions($options);
 
         if (isset($options['identifier'])) {

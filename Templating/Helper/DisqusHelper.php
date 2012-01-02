@@ -20,47 +20,30 @@ class DisqusHelper extends Helper
         $this->disqus     = $disqus;
     }
 
-    public function render(array $parameters = array(), $name = null)
+    public function render($name, array $parameters = array(), $template = 'KnpDisqusBundle::list.html.php')
     {
-        $content = $this->disqus->fetch($parameters);
+        $content = $this->disqus->fetch($name, $parameters);
 
-        return $this->renderTemplate($name, array('content' => $content));
+        return $this->templating->render($template, array('content' => $content) + $this->disqus->getParameters());
     }
 
-    public function thread(array $parameters = array(), $name = null)
+    public function thread($name, array $parameters = array(), $template = 'KnpDisqusBundle::thread.html.php')
     {
-        return $this->render($parameters, $name ?: 'KnpDisqusBundle::thread.html.php');
+        return $this->render($name, $parameters, $template);
     }
 
-    /**
-     * @param array $parameters An array of parameters for the template
-     * @param string $name A template name
-     *
-     * @return string
-     */
-    public function comments(array $parameters = array(), $name = null)
+    public function comments($name, array $parameters = array(), $template = 'KnpDisqusBundle::comments.html.php')
     {
-        return $this->render($parameters, $name ?: 'KnpDisqusBundle::comments.html.php');
+        return $this->render($name, $parameters, $template);
     }
 
-    /**
-     * @param array $parameters An array of parameters for the template
-     * @param string $name A template name
-     *
-     * @return string
-     */
-    public function commentCount(array $parameters = array(), $name = null)
+    public function commentCount($name, array $parameters = array(), $template = 'KnpDisqusBundle::commentCount.html.php')
     {
-        return $this->render($parameters, $name ?: 'KnpDisqusBundle::commentCount.html.php');
+        return $this->render($name, $parameters, $template);
     }
 
     public function getName()
     {
         return 'knp_disqus';
-    }
-
-    protected function renderTemplate($name, array $parameters)
-    {
-        return $this->templating->render($name, $parameters + $this->disqus->getParameters());
     }
 }

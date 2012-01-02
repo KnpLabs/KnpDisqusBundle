@@ -13,7 +13,6 @@
         <service id="knp_disqus.request" class="Knp\Bundle\KnpDisqusBundle\Disqus">
             <argument type="service" id="buzz.client" />
             <argument>%knp_disqus.api_key%</argument>
-            <argument>%knp_disqus.shortname%</argument>
             <argument>%kernel.debug%</argument>
         </service>
 

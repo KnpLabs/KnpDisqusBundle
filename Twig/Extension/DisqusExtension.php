@@ -36,24 +36,24 @@ class DisqusExtension extends \Twig_Extension
         );
     }
 
-    public function render($parameters = array())
+    public function render($name, $parameters = array(), $template = 'KnpDisqusBundle::list.html.twig')
     {
-        return $this->container->get('knp_disqus.helper')->render($parameters, 'KnpDisqusBundle::list.html.twig');
+        return $this->container->get('knp_disqus.helper')->render($name, $parameters, $template);
     }
 
-    public function renderThread($parameters = array(), $name = null)
+    public function renderThread($name, $parameters = array(), $template = 'KnpDisqusBundle::thread.html.twig')
     {
-        return $this->container->get('knp_disqus.helper')->render($parameters, $name ?: 'KnpDisqusBundle::thread.html.twig');
+        return $this->render($name, $parameters, $template);
     }
 
-    public function renderComments($parameters = array(), $name = null)
+    public function renderComments($name, $parameters = array(), $template = 'KnpDisqusBundle::comments.html.twig')
     {
-        return $this->container->get('knp_disqus.helper')->render($parameters, $name ?: 'KnpDisqusBundle::comments.html.twig');
+        return $this->render($name, $parameters, $template);
     }
 
-    public function renderCommentCount($parameters = array(), $name = null)
+    public function renderCommentCount($name, $parameters = array(), $template = 'KnpDisqusBundle::commentCount.html.twig')
     {
-        return $this->container->get('knp_disqus.helper')->render($parameters, $name ?: 'KnpDisqusBundle::commentCount.html.twig');
+        return $this->render($name, $parameters, $template);
     }
 
     /**
