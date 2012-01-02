@@ -15,10 +15,16 @@ use Buzz\Client\ClientInterface;
 use Buzz\Message\Request;
 use Buzz\Message\Response;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class Disqus
 {
     const DISQUS_URL = 'https://disqus.com/api/3.0/';
 
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterfac
+     */
+    protected $container;
     /**
      * @var \Buzz\Client\ClientInterface
      */
@@ -40,12 +46,13 @@ class Disqus
         'debug'   => 0,
     );
 
-    public function __construct(ClientInterface $client, $apiKey, $debug = 0)
+    public function __construct(ContainerInterface $container, $apiKey, $debug = 0)
     {
-        $this->client = $client;
+        $this->container = $container;
+        $this->client    = $container->get('buzz.client');
 
-        $this->apiKey = $apiKey;
-        $this->debug  = $debug;
+        $this->apiKey    = $apiKey;
+        $this->debug     = $debug;
     }
 
     public function fetch($shortname, array $options, $what = 'threads/listPosts')
@@ -70,8 +77,20 @@ class Disqus
         }
 
         $url = self::DISQUS_URL.$what.'.json?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
+        if ($this->container->has('knp_zend_manager')) {
+            $cache = $this->container->get('knp_zend_manager');
+            $cache = $cache->getCache($this->container->getParameter('knp_disqus.cache.'.$shortname));
+            $key   = sha1($url);
+            if (false === ($content = $cache->load($key))) {
+                $content = json_decode($this->httpRequest($url), true);
 
-        return json_decode($this->httpRequest($url), true);
+                $cache->save($content, $key);
+            }
+        } else {
+            $content = json_decode($this->httpRequest($url), true);
+        }
+
+        return $content;
     }
 
     public function getParameters()
