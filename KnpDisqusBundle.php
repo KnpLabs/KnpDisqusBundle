@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Knp\Bundle\KnpDisqusBundle;
+namespace Knp\Bundle\DisqusBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle as BaseBundle;
 

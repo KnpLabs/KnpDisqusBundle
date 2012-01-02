@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Knp\Bundle\KnpDisqusBundle;
+namespace Knp\Bundle\DisqusBundle;
 
 use Buzz\Client\ClientInterface;
 use Buzz\Message\Request;
@@ -88,7 +88,7 @@ class Disqus
         );
     }
 
-    protected function buildUrl($identifier, $fetch, $format = 'json')
+    protected function buildUrl($options, $fetch, $format = 'json')
     {
         if (isset($options['identifier'])) {
             $this->id = array('identifier' => $options['identifier']);
@@ -106,7 +106,7 @@ class Disqus
         }
 
         // @todo this should be more based on API docs (many params for many different fetch routes)
-        return self::DISQUS_URL.$fetch.'.'.$format.'?thread'.$identifier.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
+        return self::DISQUS_URL.$fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
     }
 
     protected function setOptions(array $options)

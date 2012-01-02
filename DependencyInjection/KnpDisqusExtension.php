@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Knp\Bundle\KnpDisqusBundle\DependencyInjection;
+namespace Knp\Bundle\DisqusBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;

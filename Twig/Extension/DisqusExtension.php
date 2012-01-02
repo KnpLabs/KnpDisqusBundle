@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Knp\Bundle\KnpDisqusBundle\Twig\Extension;
+namespace Knp\Bundle\DisqusBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

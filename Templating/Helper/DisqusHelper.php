@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Knp\Bundle\KnpDisqusBundle\Templating\Helper;
+namespace Knp\Bundle\DisqusBundle\Templating\Helper;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Templating\EngineInterface;
