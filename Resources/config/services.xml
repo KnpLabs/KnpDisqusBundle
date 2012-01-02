@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_disqus.helper.class">Knp\Bundle\KnpDisqusBundle\Templating\Helper\DisqusHelper</parameter>
+        <parameter key="knp_disqus.twig.class">Knp\Bundle\KnpDisqusBundle\Twig\Extension\DisqusExtension</parameter>
+    </parameters>
+
+    <services>
+        <service id="knp_disqus.request" class="Knp\Bundle\KnpDisqusBundle\Disqus">
+            <argument type="service" id="buzz.client" />
+            <argument>%knp_disqus.api_key%</argument>
+            <argument>%knp_disqus.shortname%</argument>
+            <argument>%kernel.debug%</argument>
+        </service>
+
+        <service id="knp_disqus.helper" class="%knp_disqus.helper.class%">
+            <argument type="service" id="templating" />
+            <tag name="templating.helper" alias="disqus" />
+            <argument type="service" id="knp_disqus.request" />
+        </service>
+
+        <service id="knp_disqus.twig" class="%knp_disqus.twig.class%">
+            <argument type="service" id="service_container" />
+            <tag name="twig.extension" />
+        </service>
+    </services>
+</container>

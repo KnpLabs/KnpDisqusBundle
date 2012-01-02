@@ -1,0 +1,7 @@
+{% if content.response|length > 0 %}
+    <ul>
+        {% for comment in content.response %}
+            <li id="comment-{{ comment.id }}">{{ comment.message|raw }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -1,0 +1,58 @@
+{
+    "name":        "knplabs/knp-disqus-bundle",
+    "type":        "symfony-bundle",
+    "keywords":    ["comments", "forum", "disqus"],
+    "homepage":    "http://github.com/KnpLabs/KnpDisqusBundle",
+    "license":     "MIT",
+
+    "authors": [
+        {
+            "name": "Joseph Bielawski",
+            "email": "jozef.bielawski@gmail.com"
+        }
+    ],
+
+    "require": {
+        "php":                      ">=5.3.2",
+        "symfony/framework-bundle": "2.1.*",
+        "sensio/buzz-bundle":       "*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Knp\\Bundle\\DisqusBundle": ""
+        }
+    },
+
+    "target-dir": "Knp/Bundle/DisqusBundle",
+
+    "repositories": {
+        "sensio/buzz-bundle": {
+            "package": {
+                "name":     "sensio/buzz-bundle",
+                "version":  "master-dev",
+
+                "dist": {
+                    "url":  "https://github.com/sensio/SensioBuzzBundle/zipball/master",
+                    "type": "zip"
+                },
+
+                "source": {
+                    "url":          "git://github.com/sensio/SensioBuzzBundle.git",
+                    "type":         "git",
+                    "reference":    "master"
+                },
+
+                "require": {
+                    "kriswallsmith/buzz": "*"
+                },
+
+                "autoload": {
+                    "psr-0": { "Sensio\\Bundle\\SensioBuzzBundle": "" }
+                },
+
+                "target-dir": "Sensio/Bundle/BuzzBundle"
+            }
+        }
+    }
+}
