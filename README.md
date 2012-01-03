@@ -56,6 +56,12 @@ Then run the usual `bin/vendors`:
 
     bin/vendors install
 
+Register autoloads:
+
+    $loader->registerNamespaces(array(
+        'Zend'             => __DIR__.'/../vendor',
+    ));
+
 Register the bundles in your `AppKernel`:
 
     $bundles = array(
