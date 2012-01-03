@@ -9,6 +9,14 @@ use Knp\Bundle\DisqusBundle\DependencyInjection\KnpDisqusExtension;
 
 class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testApiKeyIsRequired()
+    {
+        $this->createConfiguration('error');
+    }
+
     public function testApiKeyParameter()
     {
         $this->createConfiguration('empty');
@@ -23,43 +31,48 @@ class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('lorem', 'foobar'), $this->configuration->getParameter('knp_disqus.forums'));
     }
 
-    /**
-     * @return ContainerBuilder
-     */
     protected function createConfiguration($type)
     {
         $this->configuration = new ContainerBuilder();
         $this->configuration->setParameter('kernel.debug', 0);
 
         $loader = new KnpDisqusExtension();
-        $config = $type =='empty' ? $this->getEmptyConfig() : $this->getFullConfig();
+        $config = $this->getConfig($type);
         $loader->load(array($config), $this->configuration);
 
         $this->assertTrue($this->configuration instanceof ContainerBuilder);
     }
 
-    protected function getEmptyConfig()
+    protected function getConfig($type)
     {
-        $yaml = <<<EOF
+        switch ($type) {
+            case 'empty':
+                $yaml = <<<EOF
 api_key: PUBLIC_KEY
 EOF;
-        $parser = new Parser();
+                break;
 
-        return $parser->parse($yaml);
-    }
-
-    protected function getFullConfig()
-    {
-        $yaml = <<<EOF
+            case 'full':
+                $yaml = <<<EOF
 api_key: PUBLIC_KEY
 forums:
     lorem:
-        shortname: lorem
         cache: test_cache_key
 
     test:
         shortname: foobar
 EOF;
+                break;
+
+            case 'error':
+                $yaml = <<<EOF
+forums:
+    test:
+        shortname: foobar
+EOF;
+                break;
+        }
+
         $parser = new Parser();
 
         return $parser->parse($yaml);
