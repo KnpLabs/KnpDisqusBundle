@@ -19,7 +19,6 @@ Add this to your `deps`:
 
     [Buzz]
         git=https://github.com/kriswallsmith/Buzz.git
-        version=v0.5
 
     [KnpDisqusBundle]
         git=https://github.com/KnpLabs/KnpDisqusBundle.git
@@ -57,6 +56,13 @@ If you wanna use cache, you can to install [KnpZendCacheBundle](https://github.c
                 shortname: %knp_disqus.lorem.shortname%
                 cache: my_cache_for_lorem # cache template key, usage described below
 
+### parameters.yml
+
+    knp_disqus.api_key: YOUR_PUBLIC_API_KEY
+    # Insert your disqus shortname
+    # it's the unique identifier for your website as registered on Disqus
+    knp_disqus.lorem.shortname: "lorem"
+
 If you setup up an cache, you should also configure cache provider, which will be used automaticlly:
 
 ### config.yml
@@ -72,13 +78,6 @@ If you setup up an cache, you should also configure cache provider, which will b
                     name: File
                     options:
                         cache_dir: %kernel.root_dir%/cache/%kernel.environment%
-
-### parameters.yml
-
-    knp_disqus.api_key: YOUR_PUBLIC_API_KEY
-    # Insert your disqus shortname
-    # it's the unique identifier for your website as registered on Disqus
-    knp_disqus.lorem.shortname: "lorem"
 
 ## Usage:
 
