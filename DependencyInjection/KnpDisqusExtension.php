@@ -14,30 +14,31 @@ namespace Knp\Bundle\DisqusBundle\DependencyInjection;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 
 class KnpDisqusExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $container->setParameter('knp_disqus.api_key', $configs[0]['api_key']);
-        $container->setParameter('knp_disqus.debug', array_key_exists('debug', $configs[0]) ? (bool)$configs[0]['debug'] : $container->getParameter('kernel.debug'));
+        $processor = new Processor();
+        $configuration = new Configuration($container->getParameter('kernel.debug'));
+        $config = $processor->processConfiguration($configuration, $configs);
 
         if ($container->hasParameter('knp_zend_cache')) {
-            foreach ($configs[0]['forums'] as $shortname => $config) {
-                if (isset($config['cache'])) {
-                    if (!$container->hasParameter('knp_zend_cache.templates.'.$config['cache'])) {
-                        throw new \InvalidArgumentException('Unknown cache template key used: '.$config['cache']);
+            foreach ($config['forums'] as $shortname => $data) {
+                if (isset($data['cache'])) {
+                    if (!$container->hasParameter('knp_zend_cache.templates.'.$data['cache'])) {
+                        throw new \InvalidArgumentException('Unknown cache template key used: '.$data['cache']);
                     }
 
-                    if (!isset($config['shortname'])) {
-                        $config['shortname'] = $shortname;
-                    }
-
-                    $container->setParameter('knp_disqus.cache.'.$config['shortname'], $config['cache']);
+                    $container->setParameter('knp_disqus.cache.'.$shortname, $data['cache']);
                 }
             }
         }
+
+        $container->setParameter('knp_disqus.api_key', $config['api_key']);
+        $container->setParameter('knp_disqus.debug', $config['debug']);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
