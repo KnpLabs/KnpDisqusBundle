@@ -113,6 +113,9 @@ class Disqus
             if (false !== strpos(',', $options['include'])) {
                 $options['include'] = explode(',', $options['include']);
             }
+            if (!is_array($options['include'])) {
+                $options['include'] = array($options['include']);
+            }
 
             $allowedIncludes = array('unapproved', 'approved', 'spam', 'deleted', 'flagged', 'highlighted');
             foreach ($options['include'] as $include) {
