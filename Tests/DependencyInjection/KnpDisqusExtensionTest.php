@@ -24,6 +24,17 @@ class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('PUBLIC_KEY', $this->configuration->getParameter('knp_disqus.api_key'));
     }
 
+    public function testDebugParameter()
+    {
+        $this->createConfiguration('empty');
+
+        $this->assertEquals(0, $this->configuration->getParameter('knp_disqus.debug'));
+
+        $this->createConfiguration('empty', 1);
+
+        $this->assertEquals(1, $this->configuration->getParameter('knp_disqus.debug'));
+    }
+
     public function testCacheKeyParameter()
     {
         $this->createConfiguration('full');
@@ -31,10 +42,10 @@ class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('lorem', 'foobar'), $this->configuration->getParameter('knp_disqus.forums'));
     }
 
-    protected function createConfiguration($type)
+    protected function createConfiguration($type, $debug = 0)
     {
         $this->configuration = new ContainerBuilder();
-        $this->configuration->setParameter('kernel.debug', 0);
+        $this->configuration->setParameter('kernel.debug', $debug);
 
         $loader = new KnpDisqusExtension();
         $config = $this->getConfig($type);
