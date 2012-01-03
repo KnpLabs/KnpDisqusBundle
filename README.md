@@ -44,29 +44,7 @@ Register the bundles in your `AppKernel`:
 
 ### Optional (cache usage)
 
-If you wanna use cache, you can add an [KnpZendCacheBundle](https://github.com/KnpLabs/KnpZendCacheBundle). To do that you will need to follow this additional steps:
-
-Add this to your `deps`:
-
-    [KnpZendCacheBundle]
-        git=https://github.com/KnpLabs/KnpZendCacheBundle.git
-        target=/bundles/Knp/Bundle/ZendCacheBundle
-
-Then run the usual `bin/vendors`:
-
-    bin/vendors install
-
-Register autoloads:
-
-    $loader->registerNamespaces(array(
-        'Zend'             => __DIR__.'/../vendor',
-    ));
-
-Register the bundles in your `AppKernel`:
-
-    $bundles = array(
-        new Knp\Bundle\ZendCacheBundle\KnpZendCacheBundle(),
-    );
+If you wanna use cache, you can to install [KnpZendCacheBundle](https://github.com/KnpLabs/KnpZendCacheBundle), to do that follow the installation instructions in [KnpZendCacheBundle README file](https://github.com/KnpLabs/KnpZendCacheBundle/blob/master/README.markdown).
 
 ## Configuration
 
