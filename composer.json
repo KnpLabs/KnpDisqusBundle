@@ -7,8 +7,12 @@
 
     "authors": [
         {
-            "name": "Joseph Bielawski",
-            "email": "jozef.bielawski@gmail.com"
+            "name": "KnpLabs Team",
+            "homepage": "http://knplabs.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "http://github.com/KnpLabs/KnpDisqusBundle/contributors"
         }
     ],
 
