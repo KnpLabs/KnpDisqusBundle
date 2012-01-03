@@ -11,7 +11,6 @@
 
 namespace Knp\Bundle\DisqusBundle\Templating\Helper;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
@@ -34,21 +33,6 @@ class DisqusHelper extends Helper
         $content = $this->disqus->fetch($name, $parameters);
 
         return $this->templating->render($template, array('content' => $content) + $parameters + $this->disqus->getParameters());
-    }
-
-    public function thread($name, array $parameters = array(), $template = 'KnpDisqusBundle::thread.html.php')
-    {
-        return $this->render($name, $parameters, $template);
-    }
-
-    public function comments($name, array $parameters = array(), $template = 'KnpDisqusBundle::comments.html.php')
-    {
-        return $this->render($name, $parameters, $template);
-    }
-
-    public function commentCount($name, array $parameters = array(), $template = 'KnpDisqusBundle::commentCount.html.php')
-    {
-        return $this->render($name, $parameters, $template);
     }
 
     public function getName()

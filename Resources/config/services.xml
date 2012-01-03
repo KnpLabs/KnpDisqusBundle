@@ -7,10 +7,11 @@
     <parameters>
         <parameter key="knp_disqus.helper.class">Knp\Bundle\DisqusBundle\Templating\Helper\DisqusHelper</parameter>
         <parameter key="knp_disqus.twig.class">Knp\Bundle\DisqusBundle\Twig\Extension\DisqusExtension</parameter>
+        <parameter key="knp_disqus.api.class">Knp\Bundle\DisqusBundle\Disqus</parameter>
     </parameters>
 
     <services>
-        <service id="knp_disqus.request" class="Knp\Bundle\DisqusBundle\Disqus">
+        <service id="knp_disqus.request" class="%knp_disqus.api.class%">
             <argument type="service" id="service_container" />
             <argument>%knp_disqus.api_key%</argument>
             <argument>%kernel.debug%</argument>
