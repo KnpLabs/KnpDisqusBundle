@@ -3,14 +3,33 @@
     <div id="dsq-content">
         <ul id="dsq-comments">
             {% for comment in content.response %}
-                <li id="dsq-comment-{{ comment.id }}">
-                    <div id="dsq-comment-header-{{ comment.id }}" class="dsq-comment-header">
-                        <cite id="dsq-cite-{{ comment.id }}">
-                            <span id="dsq-author-user-{{ comment.id }}">{{ comment.author.name }}</span>
-                        </cite>
+                <li class="dsq-comment dsq-clearfix" data-dsq-comment-id="{{ comment.id }}" id="dsq-comment-{{ comment.id }}">
+                    <div class="dsq-avatar dsq-tt">
+                        <a href="{{ comment.author.profileUrl }}">
+                            <img alt="" src="{{ comment.author.avatar.permalink }}">
+                        </a>
                     </div>
-                    <div id="dsq-comment-body-{{ comment.id }}" class="dsq-comment-body">
-                        <div id="dsq-comment-message-{{ comment.id }}" class="dsq-comment-message">{{ comment.message|raw }}</div>
+
+                    <div class="dsq-comment-body" id="dsq-comment-body-{{ comment.id }}">
+                        <div class="dsq-comment-header">
+                            <span class="dsq-commenter-name">{{ comment.author.name }}</span>
+                        </div>
+
+                        <div id="dsq-comment-message-{{ comment.id }}" class="dsq-comment-message">
+                            <div id="dsq-comment-text-{{ comment.id }}" class="dsq-comment-text">
+                                {{ comment.message|raw }}
+                            </div>
+                        </div>
+
+                        <div class="dsq-comment-footer">
+                            <ul class="dsq-comment-meta">
+                                <li>
+                                    <a title="Link to comment by {{ comment.author.name }}" href="#comment-{{ comment.id }}">
+                                        {{ comment.createdAt|date('Y-m-d') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </li>
             {% endfor %}
