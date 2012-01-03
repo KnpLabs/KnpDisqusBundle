@@ -12,6 +12,7 @@
 namespace Knp\Bundle\DisqusBundle;
 
 use Buzz\Browser;
+use Buzz\Client\Curl;
 use Buzz\Message\Request;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -138,7 +139,7 @@ class Disqus
 
     protected function httpRequest($url, $method = Request::METHOD_GET)
     {
-        $buzz = new Browser();
+        $buzz = new Browser(new Curl());
 
         $response = $buzz->call($url, $method);
 
