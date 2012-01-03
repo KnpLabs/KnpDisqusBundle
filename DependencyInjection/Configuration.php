@@ -38,7 +38,7 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('forum')
             ->children()
                 ->arrayNode('forums')
-                    ->useAttributeAsKey('name')
+                    ->useAttributeAsKey('shortname')
                     ->prototype('array')
                     ->children()
                         ->scalarNode('shortname')->defaultNull()->end()
