@@ -1,5 +1,18 @@
 <div id="disqus_thread">
     {% if content.response|length > 0 %}
+    <style type="text/css">
+        #dsq-comments {padding: 10px 0 0}
+        .dsq-comment {position: relative;clear: both;margin: 0 0 1.5em;}
+        .dsq-avatar {left: 0;position: absolute;}
+        .dsq-avatar img {border: 0 none;border-radius: 3px;height: 36px;width: 36px;}
+        .dsq-comment-body {padding: 0 0 0 46px;}
+        .dsq-comment-header {border: 1px solid rgba(0, 0, 0, 0.15);border-radius: 3px;font-size: 13px;line-height: 14px;margin: 0 0 1em;max-height: 36px;overflow: hidden;padding: 10px;position: relative;text-overflow: ellipsis;white-space: nowrap;}
+        .dsq-comment-message {word-wrap: break-word;}
+        .dsq-comment-message {line-height: 1.5em;margin: 0 0 1em;}
+        .dsq-comment-text {display: inline;}
+        .dsq-comment-date {float: right;font-size: 90%;margin: 0 12px 0 0;}
+    </style>
+
     <div id="dsq-content">
         <ul id="dsq-comments">
             {% for comment in content.response %}
@@ -12,6 +25,7 @@
 
                     <div class="dsq-comment-body" id="dsq-comment-body-{{ comment.id }}">
                         <div class="dsq-comment-header">
+                            <span class="dsq-comment-date">{{ comment.createdAt|date('Y-m-d') }}</span>
                             <span class="dsq-commenter-name">{{ comment.author.name }}</span>
                         </div>
 
@@ -19,16 +33,6 @@
                             <div id="dsq-comment-text-{{ comment.id }}" class="dsq-comment-text">
                                 {{ comment.message|raw }}
                             </div>
-                        </div>
-
-                        <div class="dsq-comment-footer">
-                            <ul class="dsq-comment-meta">
-                                <li>
-                                    <a title="Link to comment by {{ comment.author.name }}" href="#comment-{{ comment.id }}">
-                                        {{ comment.createdAt|date('Y-m-d') }}
-                                    </a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </li>
