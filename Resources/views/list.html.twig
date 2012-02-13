@@ -20,9 +20,9 @@
                     <div class="dsq-avatar dsq-tt">
                         <a href="{{ comment.author.profileUrl }}">
                             {% if app.request.isSecure %}
-                                <img alt="" src="{{ comment.author.avatar.cache }}">
-                            {% else %}
                                 <img alt="" src="{{ comment.author.avatar.cache | replace({'http://mediacdn' : 'https://securecdn'}) }}">
+                            {% else %}
+                                <img alt="" src="{{ comment.author.avatar.cache }}">
                             {% endif %}
                         </a>
                     </div>
