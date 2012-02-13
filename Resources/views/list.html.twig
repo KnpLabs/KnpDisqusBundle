@@ -1,5 +1,5 @@
 <div id="disqus_thread">
-    {% if content.response is defined and content.response|length > 0 %}
+    {% if content.response|length > 0 %}
     <style type="text/css">
         #dsq-comments {padding: 10px 0 0}
         .dsq-comment {position: relative;clear: both;margin: 0 0 1.5em;}
@@ -19,7 +19,11 @@
                 <li class="dsq-comment dsq-clearfix" data-dsq-comment-id="{{ comment.id }}" id="dsq-comment-{{ comment.id }}">
                     <div class="dsq-avatar dsq-tt">
                         <a href="{{ comment.author.profileUrl }}">
-                            <img alt="" src="{{ comment.author.avatar.permalink }}">
+                            {% if app.request.isSecure %}
+                                <img alt="" src="{{ comment.author.avatar.cache }}">
+                            {% else %}
+                                <img alt="" src="{{ comment.author.avatar.cache | replace({'http://mediacdn' : 'https://securecdn'}) }}">
+                            {% endif %}
                         </a>
                     </div>
 
