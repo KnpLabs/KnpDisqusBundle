@@ -84,7 +84,7 @@ If you setup up an cache, you should also configure cache provider, which will b
 ### In your Twig template:
 
 ```jinja
-{{ knp_disqus_render('lorem', {'identifier': '/december-2010/the-best-day-of-my-life/', 'limit': 100}) }}
+{{ knp_disqus_render('lorem', {'identifier': '/december-2010/the-best-day-of-my-life/', 'limit': 100, 'language': 'de_formal'}) }}
 ```
 
 ### Or in Controller:
@@ -98,6 +98,7 @@ public function myPageAction()
     $comments = $this->get('knp_disqus.forum.lorem')->fetch(array(
         'identifier' => '/december-2010/the-best-day-of-my-life/',
         'limit' => 100,
+        'language' => 'de_formal'
     ));
 
     return $this->render("LoremIpsumBundle:Lorem:myPage.html.twig", array(
