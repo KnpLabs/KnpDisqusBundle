@@ -19,15 +19,27 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Disqus
 {
+    /**
+     * @var string
+     */
     const DISQUS_URL = 'https://disqus.com/api/3.0/';
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterfac
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
 
+    /**
+     * @var string
+     */
     protected $apiKey;
+    /**
+     * @var string
+     */
     protected $shortname;
+    /**
+     * @var integer
+     */
     protected $debug;
 
     protected $id;
@@ -42,6 +54,11 @@ class Disqus
         'debug'   => 0,
     );
 
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param string $apiKey
+     * @param int    $debug
+     */
     public function __construct(ContainerInterface $container, $apiKey, $debug = 0)
     {
         $this->container = $container;
@@ -50,6 +67,13 @@ class Disqus
         $this->debug     = $debug;
     }
 
+    /**
+     * @param string $shortname
+     * @param array  $options
+     * @param string $fetch
+     *
+     * @return string
+     */
     public function fetch($shortname, array $options, $fetch = 'threads/listPosts')
     {
         $this->shortname = $shortname;
@@ -73,6 +97,9 @@ class Disqus
         return $content;
     }
 
+    /**
+     * @return array
+     */
     public function getParameters()
     {
         return array(
@@ -83,7 +110,16 @@ class Disqus
         );
     }
 
-    protected function buildUrl($options, $fetch, $format = 'json')
+    /**
+     * @param array  $options
+     * @param string $fetch
+     * @param string $format
+     *
+     * @return string
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function buildUrl(array $options, $fetch, $format = 'json')
     {
         if (isset($options['identifier'])) {
             $this->id = array('identifier' => $options['identifier']);
@@ -97,13 +133,20 @@ class Disqus
         }
 
         if (!isset($id)) {
-            throw new \InvalidArgumentException();
+            throw new \InvalidArgumentException('You need to give an id.');
         }
 
         // @todo this should be more based on API docs (many params for many different fetch routes)
         return self::DISQUS_URL.$fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
     }
 
+    /**
+     * @param array $options
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
     protected function setOptions(array $options)
     {
         if (isset($options['order']) && !in_array($options['order'], array('asc', 'desc'))) {
@@ -137,6 +180,12 @@ class Disqus
         return array_merge($this->options, $options);
     }
 
+    /**
+     * @param string $url
+     * @param mixed  $method
+     *
+     * @return string
+     */
     protected function httpRequest($url, $method = Request::METHOD_GET)
     {
         $buzz = new Browser(new Curl());
