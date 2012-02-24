@@ -28,7 +28,7 @@ Then run the usual `bin/vendors`:
 
     bin/vendors install
 
-Register autoloads:
+Register autoloader:
 
     $loader->registerNamespaces(array(
         'Knp'              => __DIR__.'/../vendor/bundles',
@@ -55,6 +55,8 @@ If you wanna use cache, you can to install [KnpZendCacheBundle](https://github.c
             lorem:
                 shortname: %knp_disqus.lorem.shortname%
                 cache: my_cache_for_lorem # cache template key, usage described below
+            ipsum:
+                shortname: %knp_disqus.ipsum.shortname%
 
 ### parameters.yml
 
@@ -62,8 +64,10 @@ If you wanna use cache, you can to install [KnpZendCacheBundle](https://github.c
     # Insert your disqus shortname
     # it's the unique identifier for your website as registered on Disqus
     knp_disqus.lorem.shortname: "lorem"
+    # you can also register more than one forum
+    knp_disqus.ipsum.shortname: "ipsum"
 
-If you setup up an cache, you should also configure cache provider, which will be used automaticlly:
+If you setup up an cache, you should also configure cache provider, which will be used automatically :
 
 ### config.yml
     knp_zend_cache:
@@ -95,9 +99,9 @@ public function myPageAction()
 {
     // ...
 
-    $comments = $this->get('knp_disqus.forum.lorem')->fetch(array(
+    $comments = $this->get('knp_disqus.request')->fetch('lorem', array(
         'identifier' => '/december-2010/the-best-day-of-my-life/',
-        'limit' => 100,
+        'limit'      => 100,
     ));
 
     return $this->render("LoremIpsumBundle:Lorem:myPage.html.twig", array(
