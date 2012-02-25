@@ -15,6 +15,12 @@
     var disqus_url = '{{ url }}';
     {%- endif -%}
 
+    {%- if language is defined -%}
+        var disqus_config = function () {
+            this.language = '{{ language }}';
+        };
+    {%- endif -%}
+
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
