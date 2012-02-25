@@ -49,46 +49,59 @@ If you wanna use cache, you can to install [KnpZendCacheBundle](https://github.c
 
 ### config.yml
 
-    knp_disqus:
-        api_key: %knp_disqus.api_key%
-        forums:
-            lorem:
-                shortname: %knp_disqus.lorem.shortname%
-                cache: my_cache_for_lorem # cache template key, usage described below
-            ipsum:
-                shortname: %knp_disqus.ipsum.shortname%
+```yaml
+knp_disqus:
+    api_key: %knp_disqus.api_key%
+    forums:
+        lorem:
+            shortname: %knp_disqus.lorem.shortname%
+            cache: my_cache_for_lorem # cache template key, usage described below
+        ipsum:
+            shortname: %knp_disqus.ipsum.shortname%
+```
 
 ### parameters.yml
 
-    knp_disqus.api_key: YOUR_PUBLIC_API_KEY
-    # Insert your disqus shortname
-    # it's the unique identifier for your website as registered on Disqus
-    knp_disqus.lorem.shortname: "lorem"
-    # you can also register more than one forum
-    knp_disqus.ipsum.shortname: "ipsum"
+```yaml
+knp_disqus.api_key: YOUR_PUBLIC_API_KEY
+# Insert your disqus shortname
+# it's the unique identifier for your website as registered on Disqus
+knp_disqus.lorem.shortname: "lorem"
+# you can also register more than one forum
+knp_disqus.ipsum.shortname: "ipsum"
+```
 
 If you setup up an cache, you should also configure cache provider, which will be used automatically :
 
 ### config.yml
-    knp_zend_cache:
-        templates:
-            my_cache_for_lorem:
-                frontend:
-                    name: Core
-                    options:
-                        lifetime: 7200
-                        automatic_serialization: true
-                backend:
-                    name: File
-                    options:
-                        cache_dir: %kernel.root_dir%/cache/%kernel.environment%
+
+```yaml
+knp_zend_cache:
+    templates:
+        my_cache_for_lorem:
+            frontend:
+                name: Core
+                options:
+                    lifetime: 7200
+                    automatic_serialization: true
+            backend:
+                name: File
+                options:
+                    cache_dir: %kernel.root_dir%/cache/%kernel.environment%
+```
 
 ## Usage:
 
 ### In your Twig template:
 
 ```jinja
-{{ knp_disqus_render('lorem', {'identifier': '/december-2010/the-best-day-of-my-life/', 'limit': 100, 'language': 'de_formal'}) }}
+{{ knp_disqus_render('lorem', {'identifier': '/december-2010/the-best-day-of-my-life/', 'limit': 10}) }}
+```
+
+You can also show comments for specific language:
+
+```jinja
+{{ knp_disqus_render('lorem', {'identifier': '/december-2010/the-best-day-of-my-life/', 'language': 'de_formal'}) }}
 ```
 
 ### Or in Controller:
@@ -101,8 +114,8 @@ public function myPageAction()
 
     $comments = $this->get('knp_disqus.request')->fetch('lorem', array(
         'identifier' => '/december-2010/the-best-day-of-my-life/',
-        'limit'      => 100,
-        'language'   => 'de_formal',
+        'limit'      => 10, // Default limit is set to max. value for Disqus (100 entries)
+    //    'language'   => 'de_formal', // You can fetch comments only for specific language
     ));
 
     return $this->render("LoremIpsumBundle:Lorem:myPage.html.twig", array(
