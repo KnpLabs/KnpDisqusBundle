@@ -23,7 +23,7 @@
     },
 
     "recommend": {
-        "knp/zend-cache-bundle": "*"
+        "knplabs/knp-zend-cache-bundle": "*"
     },
 
     "autoload": {
@@ -32,66 +32,5 @@
         }
     },
 
-    "target-dir": "Knp/Bundle/DisqusBundle",
-
-    "repositories": {
-        "knp/zend-cache-bundle": {
-            "package": {
-                "name": "knp/knp-zend-cache-bundle",
-                "version": "master-dev",
-                "dist": {
-                    "url": "https://github.com/KnpLabs/KnpZendCacheBundle/zipball/master",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "git://github.com/KnpLabs/KnpZendCacheBundle.git",
-                    "type": "git",
-                    "reference": "master"
-                },
-                "require": {
-                    "zendframework/zend-cache": "*",
-                    "zendframework/zend-filter": "*"
-                },
-                "autoload": {
-                    "psr-0": { "Knp\\Bundle\\ZendCacheBundle": "" }
-                },
-                "target-dir": "Knp/Bundle/ZendCacheBundle"
-            }
-        },
-        "zendframework/zend-cache": {
-            "package": {
-                "name": "zendframework/zend-cache",
-                "version": "master-dev",
-                "dist": {
-                    "url": "https://github.com/KnpLabs/zend-cache/zipball/master",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "git://github.com/KnpLabs/zend-cache.git",
-                    "type": "git",
-                    "reference": "master"
-                },
-                "autoload": {
-                    "psr-0": { "Zend\\Cache": "php/" }
-                }
-            }
-        },
-        "zendframework/zend-filter": {
-            "package": {
-                "name": "zendframework/zend-filter",
-                "dist": {
-                    "url": "https://github.com/KnpLabs/zend-filter/zipball/master",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "git://github.com/KnpLabs/zend-filter.git",
-                    "type": "git",
-                    "reference": "master"
-                },
-                "autoload": {
-                    "psr-0": { "Zend\\Filter": "php/" }
-                }
-            }
-        }
-    }
+    "target-dir": "Knp/Bundle/DisqusBundle"
 }
