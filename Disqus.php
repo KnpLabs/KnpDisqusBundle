@@ -59,11 +59,12 @@ class Disqus
      * @param string $apiKey
      * @param int    $debug
      */
-    public function __construct(ContainerInterface $container, $apiKey, $debug = 0)
+    public function __construct(ContainerInterface $container, $apiKey, $secretKey = null, $debug = 0)
     {
         $this->container = $container;
 
         $this->apiKey    = $apiKey;
+        $this->secretKey = $secretKey;
         $this->debug     = $debug;
     }
 
@@ -108,6 +109,32 @@ class Disqus
             'debug'      => $this->debug,
             'api_key'    => $this->apiKey
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getSsoParameters($parameters)
+    {
+        $sso = array();
+
+        if ($this->secretKey && isset($parameters['sso']) && isset($parameters['sso']['user'])) {
+            $sso = $parameters['sso'];
+
+            if (isset($sso['user'])) {
+                $message = base64_encode(json_encode($sso['user']));
+                $timestamp = time();
+                $hmac = hash_hmac('sha1', "$message $timestamp", $this->secretKey);
+
+                unset($sso['user']);
+                $sso['auth'] = array(
+                    'message' => $message,
+                    'hmac' => $hmac,
+                    'timestamp' => $timestamp,
+                );
+            }
+        }
+        return $sso;
     }
 
     /**

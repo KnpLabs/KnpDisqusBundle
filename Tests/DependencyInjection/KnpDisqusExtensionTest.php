@@ -31,6 +31,14 @@ class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
         $this->createConfiguration('empty');
 
         $this->assertEquals('PUBLIC_KEY', $this->configuration->getParameter('knp_disqus.api_key'));
+        $this->assertEquals('SECRET_KEY', $this->configuration->getParameter('knp_disqus.secret_key'));
+    }
+
+    public function testSecretKeyParameter()
+    {
+        $this->createConfiguration('empty');
+
+        $this->assertEquals('SECRET_KEY', $this->configuration->getParameter('knp_disqus.secret_key'));
     }
 
     public function testDebugParameter()
@@ -69,12 +77,14 @@ class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
             case 'empty':
                 $yaml = <<<EOF
 api_key: PUBLIC_KEY
+secret_key: SECRET_KEY
 EOF;
                 break;
 
             case 'full':
                 $yaml = <<<EOF
 api_key: PUBLIC_KEY
+secret_key: SECRET_KEY
 forums:
     lorem:
         cache: test_cache_key

@@ -41,9 +41,13 @@ Register the bundles in your `AppKernel`:
         new Knp\Bundle\DisqusBundle\KnpDisqusBundle(),
     );
 
-### Optional (cache usage)
+### Cache usage (optional)
 
 If you wanna use cache, you can to install [KnpZendCacheBundle](https://github.com/KnpLabs/KnpZendCacheBundle), to do that follow the installation instructions in [KnpZendCacheBundle README file](https://github.com/KnpLabs/KnpZendCacheBundle/blob/master/README.markdown).
+
+### SSO authentication (optional)
+
+If you want to manage authentication through [Disqus SSO](http://docs.disqus.com/developers/sso/) mechanism, you have to add the application secret key in the configuration and pass user information (id, username, email) which will compose the HMAC payload from it, as well as specific login/logout service information to the helper. Make sure to setup your Disqus forum to use SSO and allow for local domains (for development purposes). More details hereunder.
 
 ## Configuration
 
@@ -52,6 +56,7 @@ If you wanna use cache, you can to install [KnpZendCacheBundle](https://github.c
 ```yaml
 knp_disqus:
     api_key: %knp_disqus.api_key%
+    secret_key: %knp_disqus.secret_key% # optional, for SSO auth only
     forums:
         lorem:
             shortname: %knp_disqus.lorem.shortname%
@@ -64,6 +69,7 @@ knp_disqus:
 
 ```yaml
 knp_disqus.api_key: YOUR_PUBLIC_API_KEY
+knp_disqus.secret_key: YOUR_SECRET_API_KEY # optional, for SSO auth only
 # Insert your disqus shortname
 # it's the unique identifier for your website as registered on Disqus
 knp_disqus.lorem.shortname: "lorem"
@@ -102,6 +108,35 @@ You can also show comments for specific language:
 
 ```jinja
 {{ knp_disqus_render('lorem', {'identifier': '/december-2010/the-best-day-of-my-life/', 'language': 'de_formal'}) }}
+```
+
+To use SSO auth, pass ``sso.user`` information in the parameters to tell Disqus which user is logged in. Pass a user with an empty ``id`` to force Disqus to logout user, respectively to tell Disqus no user is logged in through SSO. Add information regarding your SSO Authentication service (login/logout urls, icon, etc.) in the ``sso.service`` parameter. See [Disqus SSO documentation](http://docs.disqus.com/developers/sso/) for more information.
+
+```jinja
+{{ knp_disqus_render(
+    'lorem',
+    {
+        'identifier': '/december-2010/the-best-day-of-my-life/',
+        'limit': 100,
+        'sso': { # optional sso params
+            'user': {
+                'id' : 'test',
+                'username' : 'John Doe',
+                'email': 'john.doe@example.com',
+            },
+            'service': {
+                'name': 'MyAuthServiceProvider',
+                'icon': 'http://example.com/favicon.png',
+                'button': 'http://example.com/images/samplenews.gif',
+                'url': 'http://example.com/login/',
+                'logout': 'http://example.com/logout/',
+                'width': '400',
+                'height': '400'
+            }
+        }
+    },
+    'KnpDisqusBundle:Default:list.html.twig' ) # optional override of template
+}}
 ```
 
 ### Or in Controller:

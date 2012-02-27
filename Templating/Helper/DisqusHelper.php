@@ -36,7 +36,12 @@ class DisqusHelper extends Helper
             $content = '';
         }
 
-        return $this->templating->render($template, array('content' => $content) + $parameters + $this->disqus->getParameters());
+        $sso = $this->disqus->getSsoParameters($parameters);
+
+        $parameters['content'] = $content;
+        $parameters = $parameters + $this->disqus->getParameters();
+        $parameters['sso'] = $sso;
+        return $this->templating->render($template, $parameters);
     }
 
     public function getName()

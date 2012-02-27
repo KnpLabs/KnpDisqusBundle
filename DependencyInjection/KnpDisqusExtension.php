@@ -36,6 +36,9 @@ class KnpDisqusExtension extends Extension
         $container->setParameter('knp_disqus.forums', $forums);
 
         $container->setParameter('knp_disqus.api_key', $config['api_key']);
+        if (isset($config['secret_key'])) {
+            $container->setParameter('knp_disqus.secret_key', $config['secret_key']);
+        }
         $container->setParameter('knp_disqus.debug', (int)$config['debug']);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

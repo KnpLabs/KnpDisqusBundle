@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('secret_key')->defaultValue('')->end()
                 ->booleanNode('debug')->defaultValue($this->debug)->end()
             ->end()
         ;
