@@ -118,7 +118,7 @@ To use SSO auth, pass ``sso.user`` information in the parameters to tell Disqus 
     {
         'identifier': '/december-2010/the-best-day-of-my-life/',
         'limit': 100,
-        'sso': { # optional sso params
+        'sso': {
             'user': {
                 'id' : 'test',
                 'username' : 'John Doe',
@@ -135,7 +135,7 @@ To use SSO auth, pass ``sso.user`` information in the parameters to tell Disqus 
             }
         }
     },
-    'KnpDisqusBundle:Default:list.html.twig' ) # optional override of template
+    'KnpDisqusBundle:Default:list.html.twig' )
 }}
 ```
 
