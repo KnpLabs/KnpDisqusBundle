@@ -1,25 +1,59 @@
 <script type="text/javascript">
     var disqus_shortname = '{{ shortname }}';
     var disqus_container_id = 'disqus_thread';
+
     {%- if debug is defined -%}
-    var disqus_developer = 1;
-    {%- endif -%}
-    {%- if id.identifier is defined -%}
-    var disqus_identifier = '{{ id.identifier }}';
-    {%- elseif id.link is defined -%}
-    var disqus_link = '{{ id.link }}';
-    {%- else -%}
-    var disqus_id = '{{ id.id }}';
-    {%- endif -%}
-    {%- if url is defined -%}
-    var disqus_url = '{{ url }}';
+        var disqus_developer = 1;
     {%- endif -%}
 
-    {%- if language is defined -%}
-    var disqus_config = function () {
-        this.language = '{{ language }}';
-    };
+    {%- if id.identifier is defined -%}
+        var disqus_identifier = '{{ id.identifier }}';
+    {%- elseif id.link is defined -%}
+        var disqus_link = '{{ id.link }}';
+    {%- else -%}
+        var disqus_id = '{{ id.id }}';
     {%- endif -%}
+
+    {%- if url is defined -%}
+        var disqus_url = '{{ url }}';
+    {%- endif -%}
+
+    var disqus_config = function () {
+        {%- if language is defined -%}
+            this.language = '{{ language }}';
+        {%- endif -%}
+
+        {%- if sso.auth is defined -%}
+            this.page.remote_auth_s3 = "{{sso.auth.message}} {{sso.auth.hmac}} {{sso.auth.timestamp}}";
+            this.page.api_key = "{{api_key}}";
+        {%- endif -%}
+
+        {%- if sso.service is defined -%}
+            this.sso = {
+                {%- if sso.service.name is defined -%}
+                name:    "{{sso.service.name}}",
+                {%- endif -%}
+                {%- if sso.service.icon is defined -%}
+                icon:    "{{sso.service.icon}}",
+                {%- endif -%}
+                {%- if sso.service.button is defined -%}
+                button:  "{{sso.service.button}}",
+                {%- endif -%}
+                {%- if sso.service.url is defined -%}
+                url:     "{{sso.service.url}}",
+                {%- endif -%}
+                {%- if sso.service.logout is defined -%}
+                logout:  "{{sso.service.logout}}",
+                {%- endif -%}
+                {%- if sso.service.width is defined -%}
+                width:   "{{sso.service.width}}",
+                {%- endif -%}
+                {%- if sso.service.height is defined -%}
+                height:  "{{sso.service.height}}"
+                {%- endif -%}
+            };
+        {%- endif -%}
+    };
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
