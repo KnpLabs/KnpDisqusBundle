@@ -14,6 +14,7 @@
         <service id="knp_disqus.request" class="%knp_disqus.api.class%">
             <argument type="service" id="service_container" />
             <argument>%knp_disqus.api_key%</argument>
+            <argument>%knp_disqus.secret_key%</argument>
             <argument>%kernel.debug%</argument>
         </service>
 
