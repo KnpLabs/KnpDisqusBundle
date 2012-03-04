@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('secret_key')->defaultValue('')->end()
+                ->scalarNode('base_url')->defaultValue('https://disqus.com/api/3.0/')->end()
                 ->booleanNode('debug')->defaultValue($this->debug)->end()
             ->end()
         ;
