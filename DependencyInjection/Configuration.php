@@ -34,8 +34,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('secret_key')->defaultValue('')->end()
                 ->booleanNode('debug')->defaultValue($this->debug)->end()
-            ->end()
-        ;
+            ->end();
 
         $this->addForumsSection($rootNode);
 
@@ -55,7 +54,6 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('cache')->defaultNull()->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 }
