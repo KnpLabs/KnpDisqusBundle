@@ -39,7 +39,7 @@ class KnpDisqusExtension extends Extension
         if (isset($config['secret_key'])) {
             $container->setParameter('knp_disqus.secret_key', $config['secret_key']);
         }
-        $container->setParameter('knp_disqus.debug', (int)$config['debug']);
+        $container->setParameter('knp_disqus.debug', (int) $config['debug']);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

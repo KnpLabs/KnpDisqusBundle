@@ -134,6 +134,7 @@ class Disqus
                 );
             }
         }
+
         return $sso;
     }
 
