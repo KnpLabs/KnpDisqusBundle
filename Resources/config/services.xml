@@ -15,6 +15,7 @@
             <argument type="service" id="service_container" />
             <argument>%knp_disqus.api_key%</argument>
             <argument>%knp_disqus.secret_key%</argument>
+            <argument>%knp_disqus.base_url%</argument>
             <argument>%kernel.debug%</argument>
         </service>
 

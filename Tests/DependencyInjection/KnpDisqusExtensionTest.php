@@ -14,6 +14,7 @@ namespace Knp\Bundle\DisqusBundle\Tests\DependencyInjection;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 
+use Knp\Bundle\DisqusBundle\Disqus;
 use Knp\Bundle\DisqusBundle\DependencyInjection\KnpDisqusExtension;
 
 class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
@@ -39,6 +40,17 @@ class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
         $this->createConfiguration('empty');
 
         $this->assertEquals('SECRET_KEY', $this->configuration->getParameter('knp_disqus.secret_key'));
+    }
+
+    public function testBaseUrlParameter()
+    {
+        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+
+        $disqus = new Disqus($container, 'PUBLIC_KEY', null, 'http://disqus.com/api/3.0/');
+
+        $content = $disqus->fetch('test', array('identifier' => 'lorem'));
+
+        $this->assertEquals(array('code' => 5, 'response' => 'Invalid API key'), $content);
     }
 
     public function testDebugParameter()

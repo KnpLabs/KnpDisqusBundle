@@ -22,7 +22,7 @@ class Disqus
     /**
      * @var string
      */
-    const DISQUS_URL = 'https://disqus.com/api/3.0/';
+    protected $baseUrl = 'https://disqus.com/api/3.0/';
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -57,14 +57,19 @@ class Disqus
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param string $apiKey
+     * @param string $secretKey
+     * @param string $baseUrl
      * @param int    $debug
      */
-    public function __construct(ContainerInterface $container, $apiKey, $secretKey = null, $debug = 0)
+    public function __construct(ContainerInterface $container, $apiKey, $secretKey = null, $baseUrl = null, $debug = 0)
     {
         $this->container = $container;
 
         $this->apiKey    = $apiKey;
         $this->secretKey = $secretKey;
+        if ($baseUrl) {
+            $this->baseUrl = $baseUrl;
+        }
         $this->debug     = $debug;
     }
 
@@ -165,7 +170,7 @@ class Disqus
         }
 
         // @todo this should be more based on API docs (many params for many different fetch routes)
-        return self::DISQUS_URL.$fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
+        return $this->baseUrl.$fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
     }
 
     /**
