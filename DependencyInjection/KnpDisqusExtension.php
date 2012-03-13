@@ -42,7 +42,7 @@ class KnpDisqusExtension extends Extension
         if (isset($config['base_url'])) {
             $container->setParameter('knp_disqus.base_url', $config['base_url']);
         }
-        $container->setParameter('knp_disqus.debug', (int)$config['debug']);
+        $container->setParameter('knp_disqus.debug', (int) $config['debug']);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

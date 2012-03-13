@@ -1,5 +1,5 @@
 {
-    "name":        "jvandenenden/knp-disqus-bundle",
+    "name":        "knplabs/knp-disqus-bundle",
     "type":        "symfony-bundle",
     "keywords":    ["comments", "forum", "disqus"],
     "homepage":    "http://github.com/KnpLabs/KnpDisqusBundle",

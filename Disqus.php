@@ -22,7 +22,7 @@ class Disqus
     /**
      * @var string
      */
-    protected $baseUrl;
+    protected $baseUrl = 'https://disqus.com/api/3.0/';
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -57,6 +57,8 @@ class Disqus
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param string $apiKey
+     * @param string $secretKey
+     * @param string $baseUrl
      * @param int    $debug
      */
     public function __construct(ContainerInterface $container, $apiKey, $secretKey = null, $baseUrl = null, $debug = 0)
@@ -65,7 +67,9 @@ class Disqus
 
         $this->apiKey    = $apiKey;
         $this->secretKey = $secretKey;
-        $this->baseUrl   = $baseUrl;
+        if ($baseUrl) {
+            $this->baseUrl = $baseUrl;
+        }
         $this->debug     = $debug;
     }
 
@@ -108,8 +112,7 @@ class Disqus
             'id'         => $this->id,
             'shortname'  => $this->shortname,
             'debug'      => $this->debug,
-            'api_key'    => $this->apiKey,
-            'base_url'   => $this->baseUrl,
+            'api_key'    => $this->apiKey
         );
     }
 
@@ -136,6 +139,7 @@ class Disqus
                 );
             }
         }
+
         return $sso;
     }
 
