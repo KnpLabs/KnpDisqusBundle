@@ -1,5 +1,5 @@
 <div id="disqus_thread">
-    {% if content.response|length > 0 %}
+    {% if content.response is defined and content.response|length > 0 %}
     <style type="text/css">
         #dsq-comments {padding: 10px 0 0}
         .dsq-comment {position: relative;clear: both;margin: 0 0 1.5em;}

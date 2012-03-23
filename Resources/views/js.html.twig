@@ -10,7 +10,7 @@
         var disqus_identifier = '{{ id.identifier }}';
     {%- elseif id.link is defined -%}
         var disqus_link = '{{ id.link }}';
-    {%- else -%}
+    {%- elseif id.id is defined -%}
         var disqus_id = '{{ id.id }}';
     {%- endif -%}
 
