@@ -30,27 +30,11 @@
 
         {%- if sso.service is defined -%}
             this.sso = {
-                {%- if sso.service.name is defined -%}
-                name:    "{{sso.service.name}}",
-                {%- endif -%}
-                {%- if sso.service.icon is defined -%}
-                icon:    "{{sso.service.icon}}",
-                {%- endif -%}
-                {%- if sso.service.button is defined -%}
-                button:  "{{sso.service.button}}",
-                {%- endif -%}
-                {%- if sso.service.url is defined -%}
-                url:     "{{sso.service.url}}",
-                {%- endif -%}
-                {%- if sso.service.logout is defined -%}
-                logout:  "{{sso.service.logout}}",
-                {%- endif -%}
-                {%- if sso.service.width is defined -%}
-                width:   "{{sso.service.width}}",
-                {%- endif -%}
-                {%- if sso.service.height is defined -%}
-                height:  "{{sso.service.height}}"
-                {%- endif -%}
+                {%- for param in sso.service -%}
+                    {%- if sso.service[param] is defined and sso.service[param] is not empty -%}
+                        {{sso.service[param]}}: "{{sso.service[param]}}"
+                    {%- endif -%}
+                {%- endfor -%}
             };
         {%- endif -%}
     };
