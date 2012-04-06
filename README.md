@@ -135,7 +135,7 @@ To use SSO auth, pass ``sso.user`` information in the parameters to tell Disqus 
             }
         }
     },
-    'KnpDisqusBundle:Default:list.html.twig' )
+    'KnpDisqusBundle::list.html.twig' )
 }}
 ```
 
