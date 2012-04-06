@@ -30,9 +30,12 @@
 
         {%- if sso.service is defined and sso.service|length > 0 -%}
             this.sso = {
-            {%- for key, param in sso.service if param is not empty -%}
-                {{ key }}: "{{ param }}"{% if not loop.last %},{% endif %}
+            {%- for key, param in sso.service -%}
+                {%- if param is not empty -%}
+                    {{ key }}: "{{ param }}"{% if not loop.last %},{% endif %}
+                {%- endif %}
             {%- endfor -%}
+
             };
         {%- endif -%}
     };
