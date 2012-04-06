@@ -72,9 +72,9 @@ knp_disqus.api_key: YOUR_PUBLIC_API_KEY
 knp_disqus.secret_key: YOUR_SECRET_API_KEY # optional, for SSO auth only
 # Insert your disqus shortname
 # it's the unique identifier for your website as registered on Disqus
-knp_disqus.lorem.shortname: "lorem"
+knp_disqus.lorem.shortname: "dolor-sid"
 # you can also register more than one forum
-knp_disqus.ipsum.shortname: "ipsum"
+knp_disqus.ipsum.shortname: "amet"
 ```
 
 If you setup up an cache, you should also configure cache provider, which will be used automatically :
@@ -101,20 +101,20 @@ knp_zend_cache:
 ### In your Twig template:
 
 ```jinja
-{{ knp_disqus_render('lorem', {'identifier': '/december-2010/the-best-day-of-my-life/', 'limit': 10}) }}
+{{ knp_disqus_render('dolor-sid', {'identifier': '/december-2010/the-best-day-of-my-life/', 'limit': 10}) }}
 ```
 
 You can also show comments for specific language:
 
 ```jinja
-{{ knp_disqus_render('lorem', {'identifier': '/december-2010/the-best-day-of-my-life/', 'language': 'de_formal'}) }}
+{{ knp_disqus_render('amet', {'identifier': '/december-2010/the-best-day-of-my-life/', 'language': 'de_formal'}) }}
 ```
 
 To use SSO auth, pass ``sso.user`` information in the parameters to tell Disqus which user is logged in. Pass a user with an empty ``id`` to force Disqus to logout user, respectively to tell Disqus no user is logged in through SSO. Add information regarding your SSO Authentication service (login/logout urls, icon, etc.) in the ``sso.service`` parameter. See [Disqus SSO documentation](http://docs.disqus.com/developers/sso/) for more information.
 
 ```jinja
 {{ knp_disqus_render(
-    'lorem',
+    'dolor-sid',
     {
         'identifier': '/december-2010/the-best-day-of-my-life/',
         'limit': 100,
@@ -147,7 +147,7 @@ public function myPageAction()
 {
     // ...
 
-    $comments = $this->get('knp_disqus.request')->fetch('lorem', array(
+    $comments = $this->get('knp_disqus.request')->fetch('dolor-sid', array(
         'identifier' => '/december-2010/the-best-day-of-my-life/',
         'limit'      => 10, // Default limit is set to max. value for Disqus (100 entries)
     //    'language'   => 'de_formal', // You can fetch comments only for specific language
