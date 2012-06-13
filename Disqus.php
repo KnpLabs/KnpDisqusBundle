@@ -87,8 +87,8 @@ class Disqus
         $options = $this->setOptions($options);
 
         $url = $this->buildUrl($options, $fetch);
-        if ($this->container->has('knp_zend_cache.manager')) {
-            $cache = $this->container->get('knp_zend_cache.manager');
+        if ($this->container->has('knp_zend_manager')) {
+            $cache = $this->container->get('knp_zend_manager');
             $cache = $cache->getCache($this->container->getParameter('knp_disqus.cache.'.$shortname));
             $key   = sha1($url);
             if (false === ($content = $cache->load($key))) {
