@@ -42,7 +42,7 @@
             {% set service = [] %}
             {%- for key, param in sso.service -%}
                 {%- if param is not empty -%}
-                    {% set service = service|merge({key:param}) %}
+                    {% set service = service|merge({(key):param}) %}
                 {%- endif %}
             {%- endfor -%}
 
