@@ -39,14 +39,14 @@
         {%- endif -%}
 
         {%- if sso.service is defined and sso.service|length > 0 -%}
-            this.sso = {
+            {% set service = [] %}
             {%- for key, param in sso.service -%}
                 {%- if param is not empty -%}
-                    {{ key }}: "{{ param }}"{% if not loop.last %},{% endif %}
+                    {% set service = service|merge({key:param}) %}
                 {%- endif %}
             {%- endfor -%}
 
-            };
+            this.sso = {{ service|json_encode|raw }};
         {%- endif -%}
     };
 
