@@ -18,11 +18,11 @@
 
     "require": {
         "php":                      ">=5.3.2",
-        "symfony/framework-bundle": "2.1.*",
-        "kriswallsmith/buzz":       "*"
+        "symfony/framework-bundle": ">=2.0,<2.2-dev",
+        "kriswallsmith/buzz":       "0.6"
     },
 
-    "recommend": {
+    "require-dev": {
         "knplabs/knp-zend-cache-bundle": "*"
     },
 
