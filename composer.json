@@ -23,7 +23,7 @@
     },
 
     "require-dev": {
-        "knplabs/knp-zend-cache-bundle": "0.1"
+        "knplabs/knp-zend-cache-bundle": "*"
     },
 
     "autoload": {
