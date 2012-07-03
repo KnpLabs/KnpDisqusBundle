@@ -13,7 +13,7 @@ namespace Knp\Bundle\DisqusBundle;
 
 use Buzz\Browser;
 use Buzz\Client\Curl;
-use Buzz\Message\Request;
+use Buzz\Message\RequestInterface;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,7 +25,7 @@ class Disqus
     protected $baseUrl = 'https://disqus.com/api/3.0/';
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     protected $container;
 
@@ -44,6 +44,9 @@ class Disqus
 
     protected $id;
 
+    /**
+     * @var array
+     */
     protected $options = array(
         'since'   => null,
         'cursor'  => null,
@@ -55,7 +58,7 @@ class Disqus
     );
 
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param ContainerInterface $container
      * @param string $apiKey
      * @param string $secretKey
      * @param string $baseUrl
@@ -67,10 +70,11 @@ class Disqus
 
         $this->apiKey    = $apiKey;
         $this->secretKey = $secretKey;
+        $this->debug     = $debug;
+
         if ($baseUrl) {
             $this->baseUrl = $baseUrl;
         }
-        $this->debug     = $debug;
     }
 
     /**
@@ -117,6 +121,8 @@ class Disqus
     }
 
     /**
+     * @param array $parameters
+     *
      * @return array
      */
     public function getSsoParameters($parameters)
@@ -219,7 +225,7 @@ class Disqus
      *
      * @return string
      */
-    protected function httpRequest($url, $method = Request::METHOD_GET)
+    protected function httpRequest($url, $method = RequestInterface::METHOD_GET)
     {
         $buzz = new Browser(new Curl());
 
