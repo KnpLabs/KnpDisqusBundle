@@ -104,6 +104,36 @@ class Disqus
             $content = json_decode($this->httpRequest($url), true);
         }
 
+        /**
+         * Huge temporary hack to make SSL possible. The cache URL breaks
+         * down into 2 cases:
+         *
+         *  1) If the user does not have an avatar, then we get something
+         *      like http://www.gravatar..., which ultimately redirects
+         *      to http://mediacdn... showing the default image
+         *  2) If the user *has* an avatar, then it's always http://mediacdn...
+         *      and shows that user's avatar
+         *
+         * The problem is that in order to be able to swap out http://mediacdn
+         * for https:///securecdn to make ssl work, the avatar must be normalized
+         * here to always return http://mediacdn... To do that, we're checking
+         * to see if it will be situation (1), and if it is, we hardcode
+         * directly to the default avatar that lives at http://mediacdn.
+         *
+         * Overall, this is necessary because disqus really doesn't seem to
+         * support https very well - we call their JS file via https, but
+         * they still serve us a bunch of http images :/.
+         */
+        foreach ($content['response'] as $key => $comment) {
+            if (isset($comment['author']['avatar']['cache'])) {
+                $cache = $comment['author']['avatar']['cache'];
+                if (strpos($cache, 'http://www.gravatar.com/avatar.php') === 0) {
+                    // we have a default URL, which we need to rewrite so that it's possible to make it secure if needed
+                    $content['response'][$key]['author']['avatar']['cache'] = 'http://mediacdn.disqus.com/1341862960/images/noavatar92.png';
+                }
+            }
+        }
+
         return $content;
     }
 
