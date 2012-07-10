@@ -124,12 +124,15 @@ class Disqus
          * support https very well - we call their JS file via https, but
          * they still serve us a bunch of http images :/.
          */
-        foreach ($content['response'] as $key => $comment) {
-            if (isset($comment['author']['avatar']['cache'])) {
-                $cache = $comment['author']['avatar']['cache'];
-                if (strpos($cache, 'http://www.gravatar.com/avatar.php') === 0) {
-                    // we have a default URL, which we need to rewrite so that it's possible to make it secure if needed
-                    $content['response'][$key]['author']['avatar']['cache'] = 'http://mediacdn.disqus.com/1341862960/images/noavatar92.png';
+
+        if (is_array($content['response'])) {
+            foreach ($content['response'] as $key => $comment) {
+                if (isset($comment['author']['avatar']['cache'])) {
+                    $cache = $comment['author']['avatar']['cache'];
+                    if (strpos($cache, 'http://www.gravatar.com/avatar.php') === 0) {
+                        // we have a default URL, which we need to rewrite so that it's possible to make it secure if needed
+                        $content['response'][$key]['author']['avatar']['cache'] = 'http://mediacdn.disqus.com/1341862960/images/noavatar92.png';
+                    }
                 }
             }
         }
