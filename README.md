@@ -15,7 +15,15 @@ This way you benefit from both the javascript widget and the robot friendly comm
 
 ## Installation
 
-Add this to your `deps`:
+With [composer](http://packagist.org), add:
+
+    {
+        require: {
+            "knplabs/knp-disqus-bundle"": "dev-master"
+        }
+    }
+
+Or use `deps` file:
 
     [Buzz]
         git=https://github.com/kriswallsmith/Buzz.git
@@ -24,11 +32,15 @@ Add this to your `deps`:
         git=https://github.com/KnpLabs/KnpDisqusBundle.git
         target=/bundles/Knp/Bundle/DisqusBundle
 
-Then run the usual `bin/vendors`:
+Then run if you use _composer_:
+
+    php composer.phar update
+
+or `bin/vendors` for _deps_:
 
     bin/vendors install
 
-Register autoloader:
+Register autoloads unless you are using [composer](http://packagist.org):
 
     $loader->registerNamespaces(array(
         'Knp'              => __DIR__.'/../vendor/bundles',
@@ -65,7 +77,7 @@ knp_disqus:
             shortname: %knp_disqus.ipsum.shortname%
 ```
 
-### parameters.yml
+### parameters.yml for _composer_ or parameters.ini for _deps_
 
 ```yaml
 knp_disqus.api_key: YOUR_PUBLIC_API_KEY
