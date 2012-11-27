@@ -6,6 +6,8 @@ This bundle will fetch the comments using Disqus API so that you can include the
 
 This way you benefit from both the javascript widget and the robot friendly comments.
 
+[![knpbundles.com](http://knpbundles.com/KnpLabs/KnpDisqusBundle/badge-short)](http://knpbundles.com/KnpLabs/KnpDisqusBundle)
+
 ## Requirements
 
 * Symfony (_2.1 (master branch) or later_)
@@ -19,7 +21,7 @@ With [composer](http://packagist.org), add:
 
     {
         require: {
-            "knplabs/knp-disqus-bundle"": "dev-master"
+            "knplabs/knp-disqus-bundle": "dev-master"
         }
     }
 
