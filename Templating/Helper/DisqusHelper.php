@@ -13,6 +13,7 @@ namespace Knp\Bundle\DisqusBundle\Templating\Helper;
 
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Templating\Helper\Helper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DisqusHelper extends Helper
 {
@@ -22,10 +23,16 @@ class DisqusHelper extends Helper
     protected $templating;
     protected $disqus;
 
-    public function __construct(EngineInterface $templating, $disqus)
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
+    protected $container;
+
+    public function __construct(EngineInterface $templating, $disqus, ContainerInterface $container)
     {
         $this->templating = $templating;
         $this->disqus     = $disqus;
+        $this->container  = $container;
     }
 
     public function render($name, array $parameters = array(), $template = 'KnpDisqusBundle::list.html.php')
@@ -33,12 +40,17 @@ class DisqusHelper extends Helper
         try {
             $content = $this->disqus->fetch($name, $parameters);
         } catch (\Exception $e) {
-            $content = '';
+            if ($this->container->getParameter('kernel.environment') == 'dev') {
+                $error = $e->getMessage();
+            } else {
+                $error = 'Ops! Seems there are problem with access to discus.com. Please refresh the page in a few minutes.';
+            }
         }
 
         $sso = $this->disqus->getSsoParameters($parameters);
 
-        $parameters['content'] = $content;
+        $parameters['error'] = isset($error) ? $error : '';
+        $parameters['content'] = isset($content) ? $content : '';
         $parameters = $parameters + $this->disqus->getParameters();
         $parameters['sso'] = $sso;
 

@@ -1,49 +1,52 @@
-<div id="disqus_thread">
-    {% if content.response is defined and content.response|length > 0 %}
-    <style type="text/css">
-        #dsq-comments {padding: 10px 0 0}
-        .dsq-comment {position: relative;clear: both;margin: 0 0 1.5em;}
-        .dsq-avatar {left: 0;position: absolute;}
-        .dsq-avatar img {border: 0 none;border-radius: 3px;height: 36px;width: 36px;}
-        .dsq-comment-body {padding: 0 0 0 46px;}
-        .dsq-comment-header {border: 1px solid rgba(0, 0, 0, 0.15);border-radius: 3px;font-size: 13px;line-height: 14px;margin: 0 0 1em;max-height: 36px;overflow: hidden;padding: 10px;position: relative;text-overflow: ellipsis;white-space: nowrap;}
-        .dsq-comment-message {word-wrap: break-word;}
-        .dsq-comment-message {line-height: 1.5em;margin: 0 0 1em;}
-        .dsq-comment-text {display: inline;}
-        .dsq-comment-date {float: right;font-size: 90%;margin: 0 12px 0 0;}
-    </style>
+{% if error is defined and error|length > 0 %}
+    {{ error }}
+{% else %}
+    <div id="disqus_thread">
+        {% if content.response is defined and content.response|length > 0 %}
+        <style type="text/css">
+            #dsq-comments {padding: 10px 0 0}
+            .dsq-comment {position: relative;clear: both;margin: 0 0 1.5em;}
+            .dsq-avatar {left: 0;position: absolute;}
+            .dsq-avatar img {border: 0 none;border-radius: 3px;height: 36px;width: 36px;}
+            .dsq-comment-body {padding: 0 0 0 46px;}
+            .dsq-comment-header {border: 1px solid rgba(0, 0, 0, 0.15);border-radius: 3px;font-size: 13px;line-height: 14px;margin: 0 0 1em;max-height: 36px;overflow: hidden;padding: 10px;position: relative;text-overflow: ellipsis;white-space: nowrap;}
+            .dsq-comment-message {word-wrap: break-word;}
+            .dsq-comment-message {line-height: 1.5em;margin: 0 0 1em;}
+            .dsq-comment-text {display: inline;}
+            .dsq-comment-date {float: right;font-size: 90%;margin: 0 12px 0 0;}
+        </style>
 
-    <div id="dsq-content">
-        <ul id="dsq-comments">
-            {% for comment in content.response %}
-                <li class="dsq-comment dsq-clearfix" data-dsq-comment-id="{{ comment.id }}" id="dsq-comment-{{ comment.id }}">
-                    <div class="dsq-avatar dsq-tt">
-                        <a href="{{ comment.author.profileUrl }}">
-                            {% if app.request.isSecure %}
-                                <img alt="" src="{{ comment.author.avatar.cache | replace({'http://mediacdn' : 'https://securecdn'}) }}">
-                            {% else %}
-                                <img alt="" src="{{ comment.author.avatar.cache }}">
-                            {% endif %}
-                        </a>
-                    </div>
+	    <div id="dsq-content">
+	        <ul id="dsq-comments">
+	            {% for comment in content.response %}
+	                <li class="dsq-comment dsq-clearfix" data-dsq-comment-id="{{ comment.id }}" id="dsq-comment-{{ comment.id }}">
+	                    <div class="dsq-avatar dsq-tt">
+	                        <a href="{{ comment.author.profileUrl }}">
+	                            {% if app.request.isSecure %}
+	                                <img alt="" src="{{ comment.author.avatar.cache | replace({'http://mediacdn' : 'https://securecdn'}) }}">
+	                            {% else %}
+	                                <img alt="" src="{{ comment.author.avatar.cache }}">
+	                            {% endif %}
+	                        </a>
+	                    </div>
+	                    <div class="dsq-comment-body" id="dsq-comment-body-{{ comment.id }}">
+	                        <div class="dsq-comment-header">
+	                            <span class="dsq-comment-date">{{ comment.createdAt|date('Y-m-d') }}</span>
+	                            <span class="dsq-commenter-name">{{ comment.author.name }}</span>
+	                        </div>
 
-                    <div class="dsq-comment-body" id="dsq-comment-body-{{ comment.id }}">
-                        <div class="dsq-comment-header">
-                            <span class="dsq-comment-date">{{ comment.createdAt|date('Y-m-d') }}</span>
-                            <span class="dsq-commenter-name">{{ comment.author.name }}</span>
-                        </div>
-
-                        <div id="dsq-comment-message-{{ comment.id }}" class="dsq-comment-message">
-                            <div id="dsq-comment-text-{{ comment.id }}" class="dsq-comment-text">
-                                {{ comment.message|raw }}
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
+	                        <div id="dsq-comment-message-{{ comment.id }}" class="dsq-comment-message">
+	                            <div id="dsq-comment-text-{{ comment.id }}" class="dsq-comment-text">
+	                                {{ comment.message|raw }}
+	                            </div>
+	                        </div>
+	                    </div>
+	                </li>
+	            {% endfor %}
+	        </ul>
+	    </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
 
-{% include 'KnpDisqusBundle::js.html.twig' %}
+    {% include 'KnpDisqusBundle::js.html.twig' %}
+{% endif %}
