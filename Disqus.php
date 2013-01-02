@@ -104,6 +104,11 @@ class Disqus
             $content = json_decode($this->httpRequest($url), true);
         }
 
+        // in case we got a bad response, fake some stuff
+        if (!is_array($content) || !isset($content['response'])) {
+            $content = array('response' => false);
+        }
+
         /**
          * Huge temporary hack to make SSL possible. The cache URL breaks
          * down into 2 cases:
@@ -262,7 +267,11 @@ class Disqus
     {
         $buzz = new Browser(new Curl());
 
-        $response = $buzz->call($url, $method);
+        try {
+            $response = $buzz->call($url, $method);
+        } catch (\RuntimeException $e) {
+            return false;
+        }
 
         return $response->getContent();
     }
