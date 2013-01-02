@@ -98,6 +98,9 @@ class Disqus
             if (false === ($content = $cache->load($key))) {
                 $content = json_decode($this->httpRequest($url), true);
 
+                // we cache, even if we have a bad response
+                // sometimes disqus goes down (request times out), and we don't want to keep making
+                // this hanging request each time - just don't server-side load the comments for now
                 $cache->save($content, $key);
             }
         } else {
