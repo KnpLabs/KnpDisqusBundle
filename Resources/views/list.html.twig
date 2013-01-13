@@ -19,7 +19,11 @@
                 <li class="dsq-comment dsq-clearfix" data-dsq-comment-id="{{ comment.id }}" id="dsq-comment-{{ comment.id }}">
                     <div class="dsq-avatar dsq-tt">
                         <a href="{{ comment.author.profileUrl }}">
-                            <img alt="" src="{{ comment.author.avatar.permalink }}">
+                            {% if app.request.isSecure %}
+                                <img alt="" src="{{ comment.author.avatar.cache | replace({'http://mediacdn' : 'https://securecdn'}) }}">
+                            {% else %}
+                                <img alt="" src="{{ comment.author.avatar.cache }}">
+                            {% endif %}
                         </a>
                     </div>
 
