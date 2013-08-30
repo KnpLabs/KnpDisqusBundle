@@ -22,17 +22,13 @@ class DisqusHelper extends Helper
      */
     protected $templating;
     protected $disqus;
+    protected $environment;
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     */
-    protected $container;
-
-    public function __construct(EngineInterface $templating, $disqus, ContainerInterface $container)
+    public function __construct(EngineInterface $templating, $disqus, $environment)
     {
-        $this->templating = $templating;
-        $this->disqus     = $disqus;
-        $this->container  = $container;
+        $this->templating   = $templating;
+        $this->disqus       = $disqus;
+        $this->environment  = $environment;
     }
 
     public function render($name, array $parameters = array(), $template = 'KnpDisqusBundle::list.html.php')
@@ -40,7 +36,7 @@ class DisqusHelper extends Helper
         try {
             $content = $this->disqus->fetch($name, $parameters);
         } catch (\Exception $e) {
-            if ($this->container->getParameter('kernel.environment') == 'dev') {
+            if ($this->environment == 'dev') {
                 $error = $e->getMessage();
             } else {
                 $error = 'Oops! Seems there are problem with access to discus.com. Please refresh the page in a few minutes.';
