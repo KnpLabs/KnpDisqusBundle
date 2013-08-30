@@ -21,11 +21,13 @@ class DisqusHelper extends Helper
      */
     protected $templating;
     protected $disqus;
+    protected $environment;
 
-    public function __construct(EngineInterface $templating, $disqus)
+    public function __construct(EngineInterface $templating, $disqus, $environment)
     {
-        $this->templating = $templating;
-        $this->disqus     = $disqus;
+        $this->templating   = $templating;
+        $this->disqus       = $disqus;
+        $this->environment  = $environment;
     }
 
     public function render($name, array $parameters = array(), $template = 'KnpDisqusBundle::list.html.php')
@@ -33,12 +35,17 @@ class DisqusHelper extends Helper
         try {
             $content = $this->disqus->fetch($name, $parameters);
         } catch (\Exception $e) {
-            $content = '';
+            if ($this->environment == 'dev') {
+                $error = $e->getMessage();
+            } else {
+                $error = 'Oops! Seems there are problem with access to discus.com. Please refresh the page in a few minutes.';
+            }
         }
 
         $sso = $this->disqus->getSsoParameters($parameters);
 
-        $parameters['content'] = $content;
+        $parameters['error'] = isset($error) ? $error : '';
+        $parameters['content'] = isset($content) ? $content : '';
         $parameters = $parameters + $this->disqus->getParameters();
         $parameters['sso'] = $sso;
 

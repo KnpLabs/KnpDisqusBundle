@@ -23,6 +23,7 @@
             <argument type="service" id="templating" />
             <tag name="templating.helper" alias="disqus" />
             <argument type="service" id="knp_disqus.request" />
+            <argument>%kernel.environment%</argument>
         </service>
 
         <service id="knp_disqus.twig" class="%knp_disqus.twig.class%">
