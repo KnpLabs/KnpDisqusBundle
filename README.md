@@ -17,26 +17,18 @@ This way you benefit from both the javascript widget and the robot friendly comm
 
 ## Installation
 
-With [composer](http://packagist.org), add:
+With [composer](http://packagist.org), run:
 
-    {
-        require: {
-            "knplabs/knp-disqus-bundle": "dev-master"
-        }
-    }
-
-Then run if you use _composer_:
-
-    php composer.phar update
+    php composer.phar require knplabs/knp-disqus-bundle:dev-master
 
 Register the bundles in your `AppKernel`:
 
 ```php
-    $bundles = array(
-        ...
-        new Knp\Bundle\DisqusBundle\KnpDisqusBundle(),
-        ...
-    );
+$bundles = array(
+    //...
+    new Knp\Bundle\DisqusBundle\KnpDisqusBundle(),
+    //...
+);
 ```
 
 ### SSO authentication (optional)
@@ -57,9 +49,13 @@ knp_disqus:
             cache: my_cache_for_lorem # cache template key, usage described below
         ipsum:
             shortname: %knp_disqus.ipsum.shortname%
+
+my_cache_for_lorem:
+    # If you setup up an cache, you should also configure cache provider, which will be used automatically
+    # ...
 ```
 
-### parameters.yml for _composer_
+### parameters.yml
 
 ```yaml
 knp_disqus.api_key:    YOUR_PUBLIC_API_KEY
@@ -69,25 +65,6 @@ knp_disqus.secret_key: YOUR_SECRET_API_KEY # optional, for SSO auth only
 knp_disqus.lorem.shortname: "dolor-sid"
 # you can also register more than one forum
 knp_disqus.ipsum.shortname: "amet"
-```
-
-If you setup up an cache, you should also configure cache provider, which will be used automatically:
-
-### config.yml
-
-```yaml
-knp_zend_cache:
-    templates:
-        my_cache_for_lorem:
-            frontend:
-                name: Core
-                options:
-                    lifetime: 7200
-                    automatic_serialization: true
-            backend:
-                name: File
-                options:
-                    cache_dir: %kernel.root_dir%/cache/%kernel.environment%
 ```
 
 ## Usage:
