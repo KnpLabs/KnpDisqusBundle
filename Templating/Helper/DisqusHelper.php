@@ -13,7 +13,6 @@ namespace Knp\Bundle\DisqusBundle\Templating\Helper;
 
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Templating\Helper\Helper;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DisqusHelper extends Helper
 {
