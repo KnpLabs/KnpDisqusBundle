@@ -10,10 +10,7 @@ This way you benefit from both the javascript widget and the robot friendly comm
 
 ## Requirements
 
-* Symfony from 2.0
 * Disqus API: [public key](http://disqus.com/api/applications/register/)
-* Dependencies:
- * [`Buzz`](https://github.com/kriswallsmith/Buzz)
 
 ## Installation
 
