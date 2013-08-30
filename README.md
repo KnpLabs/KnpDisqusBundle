@@ -10,7 +10,7 @@ This way you benefit from both the javascript widget and the robot friendly comm
 
 ## Requirements
 
-* Symfony (_2.1 (master branch) or later_)
+* Symfony from 2.0
 * Disqus API: [public key](http://disqus.com/api/applications/register/)
 * Dependencies:
  * [`Buzz`](https://github.com/kriswallsmith/Buzz)
@@ -25,39 +25,19 @@ With [composer](http://packagist.org), add:
         }
     }
 
-Or use `deps` file:
-
-    [Buzz]
-        git=https://github.com/kriswallsmith/Buzz.git
-
-    [KnpDisqusBundle]
-        git=https://github.com/KnpLabs/KnpDisqusBundle.git
-        target=/bundles/Knp/Bundle/DisqusBundle
-
 Then run if you use _composer_:
 
     php composer.phar update
 
-or `bin/vendors` for _deps_:
-
-    bin/vendors install
-
-Register autoloads unless you are using [composer](http://packagist.org):
-
-    $loader->registerNamespaces(array(
-        'Knp'              => __DIR__.'/../vendor/bundles',
-        'Buzz'             => __DIR__.'/../vendor/Buzz/lib'
-    ));
-
 Register the bundles in your `AppKernel`:
 
+```php
     $bundles = array(
+        ...
         new Knp\Bundle\DisqusBundle\KnpDisqusBundle(),
+        ...
     );
-
-### Cache usage (optional)
-
-If you wanna use cache, you can to install [KnpZendCacheBundle](https://github.com/KnpLabs/KnpZendCacheBundle), to do that follow the installation instructions in [KnpZendCacheBundle README file](https://github.com/KnpLabs/KnpZendCacheBundle/blob/master/README.markdown).
+```
 
 ### SSO authentication (optional)
 
@@ -79,10 +59,10 @@ knp_disqus:
             shortname: %knp_disqus.ipsum.shortname%
 ```
 
-### parameters.yml for _composer_ or parameters.ini for _deps_
+### parameters.yml for _composer_
 
 ```yaml
-knp_disqus.api_key: YOUR_PUBLIC_API_KEY
+knp_disqus.api_key:    YOUR_PUBLIC_API_KEY
 knp_disqus.secret_key: YOUR_SECRET_API_KEY # optional, for SSO auth only
 # Insert your disqus shortname
 # it's the unique identifier for your website as registered on Disqus
@@ -91,7 +71,7 @@ knp_disqus.lorem.shortname: "dolor-sid"
 knp_disqus.ipsum.shortname: "amet"
 ```
 
-If you setup up an cache, you should also configure cache provider, which will be used automatically :
+If you setup up an cache, you should also configure cache provider, which will be used automatically:
 
 ### config.yml
 
@@ -156,7 +136,6 @@ To use SSO auth, pass ``sso.user`` information in the parameters to tell Disqus 
 ### Or in Controller:
 
 ```php
-<?php
 public function myPageAction()
 {
     // ...
@@ -167,7 +146,7 @@ public function myPageAction()
     //    'language'   => 'de_formal', // You can fetch comments only for specific language
     ));
 
-    return $this->render("LoremIpsumBundle:Lorem:myPage.html.twig", array(
+    return $this->render('LoremIpsumBundle:Lorem:myPage.html.twig', array(
         'comments' => $comments,
     ));
 }
