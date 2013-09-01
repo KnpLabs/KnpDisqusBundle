@@ -6,6 +6,8 @@ This bundle will fetch the comments using Disqus API so that you can include the
 
 This way you benefit from both the javascript widget and the robot friendly comments.
 
+[![Build Status](https://travis-ci.org/KnpLabs/KnpDisqusBundle.png?branch=master)](https://travis-ci.org/KnpLabs/KnpDisqusBundle)
+
 [![knpbundles.com](http://knpbundles.com/KnpLabs/KnpDisqusBundle/badge-short)](http://knpbundles.com/KnpLabs/KnpDisqusBundle)
 
 ## Requirements
