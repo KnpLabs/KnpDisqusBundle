@@ -23,7 +23,7 @@
     },
 
     "require-dev": {
-        "knplabs/knp-zend-cache-bundle": "*"
+        "symfony/yaml": "*"
     },
 
     "autoload": {
