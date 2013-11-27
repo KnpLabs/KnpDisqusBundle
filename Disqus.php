@@ -215,9 +215,11 @@ class Disqus
         if (!isset($id)) {
             throw new \InvalidArgumentException('You need to give an id.');
         }
+        
+        $limit = isset($options['limit']) ? $options['limit'] : 25;
 
         // @todo this should be more based on API docs (many params for many different fetch routes)
-        return $this->baseUrl.$fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey;
+        return $this->baseUrl.$fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
     }
 
     /**
