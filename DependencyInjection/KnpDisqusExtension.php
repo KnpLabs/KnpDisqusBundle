@@ -43,6 +43,7 @@ class KnpDisqusExtension extends Extension
             $container->setParameter('knp_disqus.base_url', $config['base_url']);
         }
         $container->setParameter('knp_disqus.debug', (int) $config['debug']);
+        $container->setParameter('knp_disqus.curl_timeout', (int) $config['curl_timeout']);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

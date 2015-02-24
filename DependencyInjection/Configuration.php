@@ -11,6 +11,7 @@
 
 namespace Knp\Bundle\DisqusBundle\DependencyInjection;
 
+use Knp\Bundle\DisqusBundle\Disqus;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -34,6 +35,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('secret_key')->defaultValue('')->end()
                 ->scalarNode('base_url')->defaultValue('')->end()
+                ->scalarNode('curl_timeout')->defaultValue(Disqus::DEFAULT_TIMEOUT)->end()
                 ->booleanNode('debug')->defaultValue($this->debug)->end()
             ->end();
 
