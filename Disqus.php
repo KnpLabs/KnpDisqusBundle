@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Disqus
 {
-    const DEFAULT_TIMEOUT = 5;
+    const DEFAULT_TIMEOUT = 8;
 
     /**
      * @var string
@@ -284,8 +284,11 @@ class Disqus
         try {
             $response = $buzz->call($url, $method);
         } catch (\RuntimeException $e) {
-            return array(
-                'response' => $e->getMessage(),
+            return json_encode(
+                array(
+                    'code' => $e->getCode(),
+                    'response' => $e->getMessage(),
+                )
             );
         }
 

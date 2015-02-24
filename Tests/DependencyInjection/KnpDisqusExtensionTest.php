@@ -72,7 +72,7 @@ class KnpDisqusExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->createConfiguration('full');
 
-        $this->assertEquals(4, $this->configuration->getParameter('knp_disqus.curl_timeout'));
+        $this->assertEquals(8, $this->configuration->getParameter('knp_disqus.curl_timeout'));
     }
 
     public function testCacheKeyParameter()
@@ -108,7 +108,7 @@ EOF;
                 $yaml = <<<EOF
 api_key: PUBLIC_KEY
 secret_key: SECRET_KEY
-curl_timeout: 4
+curl_timeout: 8
 forums:
     lorem:
         cache: test_cache_key
