@@ -38,7 +38,7 @@ class DisqusHelper extends Helper
             if ($this->environment == 'dev') {
                 $error = $e->getMessage();
             } else {
-                $error = 'Oops! Seems there are problem with access to discus.com. Please refresh the page in a few minutes.';
+                $error = 'Oops! Seems there are problem with access to disqus.com. Please refresh the page in a few minutes.';
             }
         }
 
