@@ -28,7 +28,7 @@
             if(typeof fn === 'function') {
                 this.callbacks.onNewComment = [ fn ];
             } else {
-                throw "You messed something up with newCommentCallbackFunctionName";
+                throw "The new comment callback function is invalid! Make sure it's set globally on the window object.";
             }
         {%- endif -%}
 
