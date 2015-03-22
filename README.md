@@ -127,3 +127,27 @@ public function myPageAction()
     ));
 }
 ```
+
+### Adding a Callback for New Comments
+
+If you want a JavaScript function to be called when a new comment is added
+(e.g. to trigger some Analytics), first, create a global JavaScript function
+somewhere (i.e. one that is attached to the `windows` object):
+
+```javascript
+window.onNewComment = function(comment) {
+    console.log(comment);
+}
+```
+
+Next, pass the function name when rendering:
+
+```jinja
+{{ knp_disqus_render('dolor-sid', {
+    'identifier': '/december-2010/the-best-day-of-my-life/',
+    'limit': 10,
+    'newCommentCallbackFunctionName': 'onNewComment'
+}) }}
+```
+
+Enjoy!
