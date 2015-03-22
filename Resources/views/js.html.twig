@@ -23,6 +23,15 @@
             this.language = '{{ language }}';
         {%- endif -%}
 
+        {%- if newCommentCallbackFunctionName is defined -%}
+            var fn = window['{{ newCommentCallbackFunctionName }}'];
+            if(typeof fn === 'function') {
+                this.callbacks.onNewComment = [ fn ];
+            } else {
+                throw "You messed something up with newCommentCallbackFunctionName";
+            }
+        {%- endif -%}
+
         {%- if sso.auth is defined -%}
             this.page.remote_auth_s3 = "{{ sso.auth.message }} {{ sso.auth.hmac }} {{ sso.auth.timestamp }}";
             this.page.api_key = "{{api_key}}";
