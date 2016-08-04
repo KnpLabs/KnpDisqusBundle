@@ -19,12 +19,16 @@
     "require": {
         "php":                      ">=5.3.3",
         "symfony/framework-bundle": "~2.0|~3.0",
-        "symfony/phpunit-bridge": "~2.7|~3.0",
         "kriswallsmith/buzz":       "~0.7"
     },
 
     "require-dev": {
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+        "pimple/pimple": "~1.0",
+        "symfony/phpunit-bridge": "~2.7|~3.0",
+        "symfony/routing": "~2.3|~3.0",
+        "silex/silex":     "~1.0",
+        "twig/twig":       "~1.16|~2.0"
     },
 
     "autoload": {
