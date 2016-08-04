@@ -24,7 +24,7 @@
 
     "require-dev": {
         "symfony/yaml": "*",
-        "symfony/routing": "~2.3|~3.0"
+        "symfony/framework-bundle": "~2.0|~3.0"
     },
 
     "autoload": {
