@@ -270,7 +270,10 @@ class Disqus
      */
     protected function httpRequest($url, $method = RequestInterface::METHOD_GET)
     {
-        $buzz = new Browser(new Curl());
+        $curl = new Curl();
+        $curl->setVerifyPeer(false);
+
+        $buzz = new Browser($curl);
 
         try {
             $response = $buzz->call($url, $method);

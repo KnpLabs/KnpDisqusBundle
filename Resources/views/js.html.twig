@@ -19,6 +19,16 @@
     {%- endif -%}
 
     var disqus_config = function () {
+
+        if (typeof formatDisqusDate === 'function') {
+            this.callbacks.onReady = [function () {
+                formatDisqusDate();
+            }];
+            this.callbacks.onPaginate = [function () {
+                    formatDisqusDate();
+            }];
+        }
+
         {%- if language is defined -%}
             this.language = '{{ language }}';
         {%- endif -%}
