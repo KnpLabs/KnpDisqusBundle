@@ -24,7 +24,7 @@
 
     "require-dev": {
         "symfony/yaml": "^2.3|^3.0",
-        "phpunit/phpunit": "4.8"
+        "phpunit/phpunit": "^4.8|^5.7|^6.0"
     },
 
     "autoload": {
