@@ -44,7 +44,7 @@ class DisqusExtension extends \Twig_Extension
             );
         } elseif (\Twig_Environment::MAJOR_VERSION === 2) {
             return array(
-                new \Twig_SimpleFunction('knp_disqus_render', [$this, 'render'], array('is_safe' => array('html'))),
+                new \Twig_SimpleFunction('knp_disqus_render', array($this, 'render'), array('is_safe' => array('html'))),
             );
         }
 
