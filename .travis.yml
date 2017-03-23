@@ -33,4 +33,6 @@ before_install:
 
 install: composer update $COMPOSER_FLAGS
 
-script: phpunit.phar -v
+script:
+  - php phpunit.phar -v
+  - php phpunit.phar
