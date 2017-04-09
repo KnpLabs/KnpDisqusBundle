@@ -37,18 +37,9 @@ class DisqusExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-
-        if (\Twig_Environment::MAJOR_VERSION === 1) {
-            return array(
-                'knp_disqus_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
-            );
-        } elseif (\Twig_Environment::MAJOR_VERSION === 2) {
-            return array(
-                new \Twig_SimpleFunction('knp_disqus_render', array($this, 'render'), array('is_safe' => array('html'))),
-            );
-        }
-
-        return array();
+        return array(
+            new \Twig_SimpleFunction('knp_disqus_render', array($this, 'render'), array('is_safe' => array('html'))),
+        );
     }
 
     public function render($name, $parameters = array(), $template = 'KnpDisqusBundle::list.html.twig')
