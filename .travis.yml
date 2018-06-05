@@ -12,6 +12,7 @@ php:
     - 5.5
     - 5.6
     - 7.0
+    - 7.1
     - hhvm
 
 matrix:
@@ -24,7 +25,7 @@ matrix:
           env: SYMFONY_VERSION='2.3.*'
         - php: 5.6
           env: SYMFONY_VERSION='3.0.*@dev'
-        - php: 7.0
+        - php: 7.1
           env: SYMFONY_VERSION='4.1.*'
 
 before_install:
