@@ -170,8 +170,11 @@ class Disqus
     {
         $sso = array();
 
-        if ($this->secretKey && isset($parameters['sso']) && isset($parameters['sso']['user'])) {
+        if (isset($parameters['sso'])) {
             $sso = $parameters['sso'];
+        }
+
+        if ($this->secretKey && isset($parameters['sso']) && isset($parameters['sso']['user'])) {
 
             if (isset($sso['user'])) {
                 $message = base64_encode(json_encode($sso['user']));
