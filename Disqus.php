@@ -19,6 +19,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Disqus
 {
+    const DEFAULT_TIMEOUT = 8;
+
     /**
      * @var string
      */
@@ -41,6 +43,10 @@ class Disqus
      * @var integer
      */
     protected $debug;
+    /**
+     * @var integer
+     */
+    protected $timeout;
 
     protected $id;
 
@@ -64,7 +70,7 @@ class Disqus
      * @param string $baseUrl
      * @param int    $debug
      */
-    public function __construct(ContainerInterface $container, $apiKey, $secretKey = null, $baseUrl = null, $debug = 0)
+    public function __construct(ContainerInterface $container, $apiKey, $secretKey = null, $baseUrl = null, $debug = 0, $timeout = self::DEFAULT_TIMEOUT)
     {
         $this->container = $container;
 
@@ -75,6 +81,7 @@ class Disqus
         if ($baseUrl) {
             $this->baseUrl = $baseUrl;
         }
+        $this->timeout = $timeout;
     }
 
     /**
@@ -270,12 +277,19 @@ class Disqus
      */
     protected function httpRequest($url, $method = RequestInterface::METHOD_GET)
     {
-        $buzz = new Browser(new Curl());
+        $curl = new Curl();
+        $curl->setTimeout($this->timeout);
+        $buzz = new Browser($curl);
 
         try {
             $response = $buzz->call($url, $method);
         } catch (\RuntimeException $e) {
-            return false;
+            return json_encode(
+                array(
+                    'code' => $e->getCode(),
+                    'response' => $e->getMessage(),
+                )
+            );
         }
 
         return $response->getContent();

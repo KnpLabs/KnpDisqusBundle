@@ -17,6 +17,7 @@
             <argument>%knp_disqus.secret_key%</argument>
             <argument>%knp_disqus.base_url%</argument>
             <argument>%kernel.debug%</argument>
+            <argument>%knp_disqus.curl_timeout%</argument>
         </service>
 
         <service id="knp_disqus.helper" class="%knp_disqus.helper.class%" public="true">
