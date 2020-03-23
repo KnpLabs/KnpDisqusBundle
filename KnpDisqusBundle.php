@@ -11,13 +11,13 @@
 
 namespace Knp\Bundle\DisqusBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle as BaseBundle;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * KnpDisqusBundle
  *
  * @author Józef Bielawski <jozef.bielawski@gmail.com>
  */
-class KnpDisqusBundle extends BaseBundle
+class KnpDisqusBundle extends Bundle
 {
 }

@@ -9,28 +9,28 @@
 * file that was distributed with this source code.
 */
 
-namespace Knp\Bundle\DisqusBundle\Templating\Helper;
+namespace Knp\Bundle\DisqusBundle\Helper;
 
-use Symfony\Component\Templating\EngineInterface;
-use Symfony\Component\Templating\Helper\Helper;
+use Knp\Bundle\DisqusBundle\Disqus;
+use Twig\Environment;
 
-class DisqusHelper extends Helper
+class DisqusHelper
 {
+    protected $twig;
     /**
-     * @var \Symfony\Component\Templating\EngineInterface
+     * @var Disqus
      */
-    protected $templating;
     protected $disqus;
     protected $environment;
 
-    public function __construct(EngineInterface $templating, $disqus, $environment)
+    public function __construct(Environment $twig, $disqus, $environment)
     {
-        $this->templating   = $templating;
+        $this->twig         = $twig;
         $this->disqus       = $disqus;
         $this->environment  = $environment;
     }
 
-    public function render($name, array $parameters = array(), $template = 'KnpDisqusBundle::list.html.php')
+    public function render($name, array $parameters = array(), $template = '@KnpDisqus/list.html.twig')
     {
         try {
             $content = $this->disqus->fetch($name, $parameters);
@@ -49,11 +49,6 @@ class DisqusHelper extends Helper
         $parameters = $parameters + $this->disqus->getParameters();
         $parameters['sso'] = $sso;
 
-        return $this->templating->render($template, $parameters);
-    }
-
-    public function getName()
-    {
-        return 'knp_disqus';
+        return $this->twig->render($template, $parameters);
     }
 }

@@ -11,23 +11,20 @@
 
 namespace Knp\Bundle\DisqusBundle\Twig\Extension;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Knp\Bundle\DisqusBundle\Helper\DisqusHelper;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-/**
- *
- */
-class DisqusExtension extends \Twig_Extension
+class DisqusExtension extends AbstractExtension
 {
-    protected $container;
-
     /**
-     * Constructor.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @var DisqusHelper
      */
-    public function __construct(ContainerInterface $container)
+    protected $disqusHelper;
+
+    public function __construct($disqusHelper)
     {
-        $this->container = $container;
+        $this->disqusHelper = $disqusHelper;
     }
 
     /**
@@ -38,22 +35,12 @@ class DisqusExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('knp_disqus_render', array($this, 'render'), array('is_safe' => array('html'))),
+            new TwigFunction('knp_disqus_render', array($this, 'render'), array('is_safe' => array('html'))),
         );
     }
 
-    public function render($name, $parameters = array(), $template = 'KnpDisqusBundle::list.html.twig')
+    public function render($name, $parameters = array(), $template = '@KnpDisqus/list.html.twig')
     {
-        return $this->container->get('knp_disqus.helper')->render($name, $parameters, $template);
-    }
-
-    /**
-     * Returns the name of the extension.
-     *
-     * @return string The extension name
-     */
-    public function getName()
-    {
-        return 'knp_disqus';
+        return $this->disqusHelper->render($name, $parameters, $template);
     }
 }
