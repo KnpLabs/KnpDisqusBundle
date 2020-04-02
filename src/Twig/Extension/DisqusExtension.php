@@ -17,29 +17,24 @@ use Twig\TwigFunction;
 
 class DisqusExtension extends AbstractExtension
 {
-    /**
-     * @var DisqusHelper
-     */
-    protected $disqusHelper;
+    private $disqusHelper;
 
-    public function __construct($disqusHelper)
+    public function __construct(DisqusHelper $disqusHelper)
     {
         $this->disqusHelper = $disqusHelper;
     }
 
     /**
-     * Returns a list of global functions to add to the existing list.
-     *
-     * @return array An array of global functions
+     * @inheritDoc
      */
     public function getFunctions()
     {
-        return array(
-            new TwigFunction('knp_disqus_render', array($this, 'render'), array('is_safe' => array('html'))),
-        );
+        return [
+            new TwigFunction('knp_disqus_render', [$this, 'render'], ['is_safe' => ['html']]),
+        ];
     }
 
-    public function render($name, $parameters = array(), $template = '@KnpDisqus/list.html.twig')
+    public function render($name, $parameters = [], $template = '@KnpDisqus/list.html.twig')
     {
         return $this->disqusHelper->render($name, $parameters, $template);
     }

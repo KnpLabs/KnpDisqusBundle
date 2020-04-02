@@ -17,30 +17,16 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    private $debug;
-
-    public function __construct($debug)
-    {
-        $this->debug = $debug;
-    }
-
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('knp_disqus');
-
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $rootNode = $treeBuilder->root('knp_disqus');
-        }
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
                 ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('secret_key')->defaultValue('')->end()
                 ->scalarNode('base_url')->defaultValue('')->end()
-                ->booleanNode('debug')->defaultValue($this->debug)->end()
             ->end();
 
         $this->addForumsSection($rootNode);

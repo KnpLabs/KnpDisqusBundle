@@ -16,18 +16,15 @@ use Twig\Environment;
 
 class DisqusHelper
 {
-    protected $twig;
-    /**
-     * @var Disqus
-     */
-    protected $disqus;
-    protected $environment;
+    private $twig;
+    private $disqus;
+    private $environment;
 
-    public function __construct(Environment $twig, $disqus, $environment)
+    public function __construct(Environment $twig, Disqus $disqus, string $environment)
     {
-        $this->twig         = $twig;
-        $this->disqus       = $disqus;
-        $this->environment  = $environment;
+        $this->twig = $twig;
+        $this->disqus = $disqus;
+        $this->environment = $environment;
     }
 
     public function render($name, array $parameters = array(), $template = '@KnpDisqus/list.html.twig')
@@ -44,8 +41,8 @@ class DisqusHelper
 
         $sso = $this->disqus->getSsoParameters($parameters);
 
-        $parameters['error'] = isset($error) ? $error : '';
-        $parameters['content'] = isset($content) ? $content : '';
+        $parameters['error'] = $error ?? null;
+        $parameters['content'] = $content ?? [];
         $parameters = $parameters + $this->disqus->getParameters();
         $parameters['sso'] = $sso;
 

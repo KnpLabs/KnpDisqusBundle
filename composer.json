@@ -1,9 +1,10 @@
 {
-    "name":        "knplabs/knp-disqus-bundle",
-    "type":        "symfony-bundle",
-    "keywords":    ["comments", "forum", "disqus"],
-    "homepage":    "http://github.com/KnpLabs/KnpDisqusBundle",
-    "license":     "MIT",
+    "name": "knplabs/knp-disqus-bundle",
+    "type": "symfony-bundle",
+    "description": "",
+    "keywords": ["comments", "forum", "disqus"],
+    "homepage": "http://github.com/KnpLabs/KnpDisqusBundle",
+    "license": "MIT",
 
     "authors": [
         {
@@ -17,23 +18,23 @@
     ],
 
     "require": {
-        "php":                      ">=5.5",
-        "symfony/framework-bundle": "^2.8|^3.0|^4.0",
-        "kriswallsmith/buzz":       ">=0.7,<=0.16",
-        "twig/twig":                "^1.35 || ^2.4"
+        "php": "^7.2.5",
+        "ext-json": "*",
+        "symfony/framework-bundle": "^4.4|^5.0",
+        "symfony/http-client": "^4.4|^5.0",
+        "twig/twig": "^2.10|^3.0"
     },
 
     "require-dev": {
-        "symfony/yaml": "^2.3|^3.0|^4.0"
+        "symfony/yaml": "^4.4|^5.0"
     },
 
     "autoload": {
-        "psr-0": {
-            "Knp\\Bundle\\DisqusBundle": ""
-        }
+        "psr-4": { "Knp\\Bundle\\DisqusBundle\\": "src/" }
     },
-
-    "target-dir": "Knp/Bundle/DisqusBundle",
+    "autoload-dev": {
+        "psr-4": { "Knp\\Bundle\\DisqusBundle\\Tests\\": "tests/" }
+    },
 
     "extra": {
         "branch-alias": {

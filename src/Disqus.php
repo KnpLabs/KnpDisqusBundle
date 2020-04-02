@@ -11,63 +11,32 @@
 
 namespace Knp\Bundle\DisqusBundle;
 
-use Buzz\Browser;
-use Buzz\Client\Curl;
-use Buzz\Message\RequestInterface;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Disqus
 {
-    /**
-     * @var string
-     */
-    protected $baseUrl = 'https://disqus.com/api/3.0/';
+    private $baseUrl = 'https://disqus.com/api/3.0/';
+    private $apiKey;
+    private $secretKey;
+    private $debug;
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    private $shortname;
 
-    /**
-     * @var string
-     */
-    protected $apiKey;
-    /**
-     * @var string
-     */
-    protected $shortname;
-    /**
-     * @var integer
-     */
-    protected $debug;
+    private $id;
 
-    protected $id;
-
-    /**
-     * @var array
-     */
-    protected $options = array(
+    private $options = [
         'since'   => null,
         'cursor'  => null,
         'query'   => null,
-        'include' => array('approved'),
+        'include' => ['approved'],
         'order'   => 'desc',
         'limit'   => 100,
         'debug'   => 0,
-    );
+    ];
 
-    /**
-     * @param ContainerInterface $container
-     * @param string $apiKey
-     * @param string $secretKey
-     * @param string $baseUrl
-     * @param int    $debug
-     */
-    public function __construct(ContainerInterface $container, $apiKey, $secretKey = null, $baseUrl = null, $debug = 0)
+    public function __construct(string $apiKey, string $secretKey = null, string $baseUrl = null, $debug = 0)
     {
-        $this->container = $container;
-
         $this->apiKey    = $apiKey;
         $this->secretKey = $secretKey;
         $this->debug     = $debug;
@@ -77,39 +46,19 @@ class Disqus
         }
     }
 
-    /**
-     * @param string $shortname
-     * @param array  $options
-     * @param string $fetch
-     *
-     * @return string
-     */
-    public function fetch($shortname, array $options, $fetch = 'threads/listPosts')
+    public function fetch(string $shortname, array $options, string $fetch = 'threads/listPosts'): array
     {
         $this->shortname = $shortname;
 
         $options = $this->setOptions($options);
 
         $url = $this->buildUrl($options, $fetch);
-        if ($this->container->has('knp_zend_cache.manager')) {
-            $cache = $this->container->get('knp_zend_cache.manager');
-            $cache = $cache->getCache($this->container->getParameter('knp_disqus.cache.'.$shortname));
-            $key   = sha1($url);
-            if (false === ($content = $cache->load($key))) {
-                $content = json_decode($this->httpRequest($url), true);
 
-                // we cache, even if we have a bad response
-                // sometimes disqus goes down (request times out), and we don't want to keep making
-                // this hanging request each time - just don't server-side load the comments for now
-                $cache->save($content, $key);
-            }
-        } else {
-            $content = json_decode($this->httpRequest($url), true);
-        }
+        $content = $this->httpRequest($url);
 
         // in case we got a bad response, fake some stuff
         if (!is_array($content) || !isset($content['response'])) {
-            $content = array('response' => false);
+            $content = ['response' => false];
         }
 
         /**
@@ -148,27 +97,19 @@ class Disqus
         return $content;
     }
 
-    /**
-     * @return array
-     */
-    public function getParameters()
+    public function getParameters(): array
     {
-        return array(
+        return [
             'id'         => $this->id,
             'shortname'  => $this->shortname,
             'debug'      => $this->debug,
             'api_key'    => $this->apiKey
-        );
+        ];
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return array
-     */
-    public function getSsoParameters($parameters)
+    public function getSsoParameters(array $parameters): array
     {
-        $sso = array();
+        $sso = [];
 
         if ($this->secretKey && isset($parameters['sso']) && isset($parameters['sso']['user'])) {
             $sso = $parameters['sso'];
@@ -179,57 +120,47 @@ class Disqus
                 $hmac = hash_hmac('sha1', "$message $timestamp", $this->secretKey);
 
                 unset($sso['user']);
-                $sso['auth'] = array(
+                $sso['auth'] = [
                     'message' => $message,
                     'hmac' => $hmac,
                     'timestamp' => $timestamp,
-                );
+                ];
             }
         }
 
         return $sso;
     }
 
-    /**
-     * @param array  $options
-     * @param string $fetch
-     * @param string $format
-     *
-     * @return string
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function buildUrl(array $options, $fetch, $format = 'json')
+    private function buildUrl(array $options, string $fetch, string $format = 'json'): string
     {
         if (isset($options['identifier'])) {
-            $this->id = array('identifier' => $options['identifier']);
-            $id       = ':ident='.$options['identifier'];
+            $this->id = [
+                'identifier' => $options['identifier']
+            ];
+            $id = ':ident='.$options['identifier'];
         } elseif (isset($options['link'])) {
-            $this->id = array('link' => $options['link']);
-            $id       = ':link='.$options['link'];
+            $this->id = [
+                'link' => $options['link']
+            ];
+            $id = ':link='.$options['link'];
         } elseif (isset($options['id'])) {
-            $this->id = array('id' => $options['id']);
-            $id       = '='.$options['id'];
+            $this->id = [
+                'id' => $options['id']
+            ];
+            $id = '='.$options['id'];
         }
 
         if (!isset($id)) {
             throw new \InvalidArgumentException('You need to give an id.');
         }
-        
+
         $limit = isset($options['limit']) ? $options['limit'] : 25;
 
         // @todo this should be more based on API docs (many params for many different fetch routes)
         return $this->baseUrl.$fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function setOptions(array $options)
+    private function setOptions(array $options): array
     {
         if (isset($options['order']) && !in_array($options['order'], array('asc', 'desc'))) {
             throw new \InvalidArgumentException(sprintf('Unknown `order` value used (%s), allowed are: asc, desc', $options['order']));
@@ -262,22 +193,16 @@ class Disqus
         return array_merge($this->options, $options);
     }
 
-    /**
-     * @param string $url
-     * @param mixed  $method
-     *
-     * @return string
-     */
-    protected function httpRequest($url, $method = RequestInterface::METHOD_GET)
+    private function httpRequest(string $url, string $method = 'GET'): ?array
     {
-        $buzz = new Browser(new Curl());
+        $httpClient = HttpClient::create();
 
         try {
-            $response = $buzz->call($url, $method);
-        } catch (\RuntimeException $e) {
-            return false;
+            $response = $httpClient->request($method, $url);
+        } catch (TransportExceptionInterface $e) {
+            return null;
         }
 
-        return $response->getContent();
+        return $response->toArray();
     }
 }
