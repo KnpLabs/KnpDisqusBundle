@@ -5,22 +5,24 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Knp\Bundle\DisqusBundle\Disqus" class="Knp\Bundle\DisqusBundle\Disqus">
-            <argument>%knp_disqus.api_key%</argument>
-            <argument>%knp_disqus.secret_key%</argument>
-            <argument>%knp_disqus.base_url%</argument>
+        <defaults public="false"/>
+
+        <service id="knp_disqus.disqus" class="Knp\Bundle\DisqusBundle\Disqus">
+            <argument/> <!-- $apiKey -->
+            <argument/> <!-- $secretKey -->
             <argument>%kernel.debug%</argument>
         </service>
 
-        <service id="Knp\Bundle\DisqusBundle\Twig\Extension\DisqusExtension" class="Knp\Bundle\DisqusBundle\Twig\Extension\DisqusExtension">
-            <argument type="service">
-                <service id="Knp\Bundle\DisqusBundle\Helper\DisqusHelper" class="Knp\Bundle\DisqusBundle\Helper\DisqusHelper">
-                    <argument type="service" id="twig"/>
-                    <argument type="service" id="Knp\Bundle\DisqusBundle\Disqus"/>
-                    <argument>%kernel.environment%</argument>
-                </service>
-            </argument>
+        <service id="knp_disqus.helper" class="Knp\Bundle\DisqusBundle\Helper\DisqusHelper">
+            <argument type="service" id="twig"/>
+            <argument type="service" id="knp_disqus.disqus"/>
+            <argument>%kernel.environment%</argument>
+        </service>
+
+        <service id="knp_disqus.extension" class="Knp\Bundle\DisqusBundle\Twig\Extension\DisqusExtension">
+            <argument type="service" id="knp_disqus.helper" />
             <tag name="twig.extension"/>
         </service>
+
     </services>
 </container>

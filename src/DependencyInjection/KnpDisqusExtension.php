@@ -26,22 +26,8 @@ class KnpDisqusExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $forums = array();
-        foreach ($config['forums'] as $shortname => $data) {
-            $forums[] = $shortname;
-
-            if (isset($data['cache'])) {
-                $container->setParameter('knp_disqus.cache.'.$shortname, $data['cache']);
-            }
-        }
-        $container->setParameter('knp_disqus.forums', $forums);
-
-        $container->setParameter('knp_disqus.api_key', $config['api_key']);
-        if (isset($config['secret_key'])) {
-            $container->setParameter('knp_disqus.secret_key', $config['secret_key']);
-        }
-        if (isset($config['base_url'])) {
-            $container->setParameter('knp_disqus.base_url', $config['base_url']);
-        }
+        $definition = $container->getDefinition('knp_disqus.disqus');
+        $definition->replaceArgument(0, $config['api_key']);
+        $definition->replaceArgument(1, $config['secret_key']);
     }
 }

@@ -12,11 +12,13 @@
 namespace Knp\Bundle\DisqusBundle;
 
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-class Disqus
+class Disqus implements DisqusInterface
 {
-    private $baseUrl = 'https://disqus.com/api/3.0/';
+    const DISQUS_API_BASE_URI = 'https://disqus.com/api/3.0/';
+
+    private $httpClient;
+
     private $apiKey;
     private $secretKey;
     private $debug;
@@ -35,15 +37,13 @@ class Disqus
         'debug'   => 0,
     ];
 
-    public function __construct(string $apiKey, ?string $secretKey, ?string $baseUrl, bool $debug = true)
+    public function __construct(string $apiKey, ?string $secretKey, bool $debug = true)
     {
+        $this->httpClient = HttpClient::createForBaseUri(self::DISQUS_API_BASE_URI);
+
         $this->apiKey    = $apiKey;
         $this->secretKey = $secretKey;
         $this->debug     = $debug;
-
-        if ($baseUrl) {
-            $this->baseUrl = $baseUrl;
-        }
     }
 
     public function fetch(string $shortname, array $options, string $fetch = 'threads/listPosts'): array
@@ -157,7 +157,7 @@ class Disqus
         $limit = isset($options['limit']) ? $options['limit'] : 25;
 
         // @todo this should be more based on API docs (many params for many different fetch routes)
-        return $this->baseUrl.$fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
+        return $fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
     }
 
     private function setOptions(array $options): array
@@ -193,15 +193,9 @@ class Disqus
         return array_merge($this->options, $options);
     }
 
-    private function httpRequest(string $url, string $method = 'GET'): ?array
+    private function request(string $url, string $method = 'GET'): ?array
     {
-        $httpClient = HttpClient::create();
-
-        try {
-            $response = $httpClient->request($method, $url);
-        } catch (TransportExceptionInterface $e) {
-            return null;
-        }
+        $response = $this->httpClient->request($method, $url);
 
         return $response->toArray();
     }

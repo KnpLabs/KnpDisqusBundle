@@ -25,28 +25,9 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('secret_key')->defaultValue('')->end()
-                ->scalarNode('base_url')->defaultValue('')->end()
+                ->scalarNode('secret_key')->defaultNull()->end()
             ->end();
-
-        $this->addForumsSection($rootNode);
 
         return $treeBuilder;
-    }
-
-    private function addForumsSection(ArrayNodeDefinition $node)
-    {
-        $node
-            ->fixXmlConfig('forum')
-            ->children()
-                ->arrayNode('forums')
-                    ->useAttributeAsKey('shortname')
-                    ->prototype('array')
-                    ->children()
-                        ->scalarNode('shortname')->defaultNull()->end()
-                        ->scalarNode('cache')->defaultNull()->end()
-                    ->end()
-                ->end()
-            ->end();
     }
 }
