@@ -35,7 +35,7 @@ class Disqus
         'debug'   => 0,
     ];
 
-    public function __construct(string $apiKey, string $secretKey = null, string $baseUrl = null, $debug = 0)
+    public function __construct(string $apiKey, ?string $secretKey, ?string $baseUrl, bool $debug = true)
     {
         $this->apiKey    = $apiKey;
         $this->secretKey = $secretKey;
