@@ -54,7 +54,7 @@ class Disqus implements DisqusInterface
 
         $url = $this->buildUrl($options, $fetch);
 
-        $content = $this->httpRequest($url);
+        $content = $this->request($url);
 
         // in case we got a bad response, fake some stuff
         if (!is_array($content) || !isset($content['response'])) {

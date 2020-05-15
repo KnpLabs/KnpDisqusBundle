@@ -13,5 +13,5 @@ namespace Knp\Bundle\DisqusBundle;
 
 interface DisqusInterface
 {
-
+    public function fetch(string $shortname, array $options, string $fetch = 'threads/listPosts'): array;
 }
