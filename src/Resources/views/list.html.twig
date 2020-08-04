@@ -1,4 +1,4 @@
-{% if error is defined and error|length > 0 %}
+{% if error %}
     {{ error }}
 {% else %}
     <div id="disqus_thread">
@@ -48,5 +48,5 @@
         {% endif %}
     </div>
 
-    {% include 'KnpDisqusBundle::js.html.twig' %}
+    {{ include('@KnpDisqus/js.html.twig') }}
 {% endif %}

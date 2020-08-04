@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="knp_disqus.disqus_client" class="Knp\Bundle\DisqusBundle\Client\DisqusClient">
+            <argument/> <!-- $apiKey -->
+            <argument/> <!-- $secretKey -->
+            <argument>%kernel.debug%</argument>
+        </service>
+
+        <service id="Knp\Bundle\DisqusBundle\Client\DisqusClientInterface" alias="knp_disqus.disqus_client" />
+
+        <service id="knp_disqus.helper" class="Knp\Bundle\DisqusBundle\Helper\DisqusHelper">
+            <argument type="service" id="twig"/>
+            <argument type="service" id="knp_disqus.disqus_client"/>
+            <argument>%kernel.environment%</argument>
+        </service>
+    </services>
+</container>
