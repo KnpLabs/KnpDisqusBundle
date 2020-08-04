@@ -20,7 +20,7 @@
     "require": {
         "php": "^7.2.5",
         "ext-json": "*",
-        "symfony/http-client": "^4.4|^5.0",
+        "symfony/http-client": "^4.4|^5.0"
     },
 
     "require-dev": {
