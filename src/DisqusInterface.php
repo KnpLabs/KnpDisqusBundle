@@ -11,6 +11,9 @@
 
 namespace Knp\Bundle\DisqusBundle;
 
+/**
+ * @author Sadicov Vladimir <vladimir@symfonycasts.com>
+ */
 interface DisqusInterface
 {
     public function fetch(string $shortname, array $options, string $fetch = 'threads/listPosts'): array;

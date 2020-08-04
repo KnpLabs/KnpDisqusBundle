@@ -11,13 +11,22 @@
 
 namespace Knp\Bundle\DisqusBundle;
 
+use Knp\Bundle\DisqusBundle\DependencyInjection\Compiler\TwigPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * KnpDisqusBundle
  *
  * @author Józef Bielawski <jozef.bielawski@gmail.com>
+ * @author Sadicov Vladimir <vladimir@symfonycasts.com>
  */
 class KnpDisqusBundle extends Bundle
 {
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new TwigPass());
+    }
 }

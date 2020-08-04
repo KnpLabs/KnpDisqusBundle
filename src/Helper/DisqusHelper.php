@@ -13,18 +13,19 @@ namespace Knp\Bundle\DisqusBundle\Helper;
 
 use Knp\Bundle\DisqusBundle\Disqus;
 use Twig\Environment;
+use Twig\Extension\RuntimeExtensionInterface;
 
-class DisqusHelper
+class DisqusHelper implements RuntimeExtensionInterface
 {
     private $twig;
     private $disqus;
-    private $environment;
+    private $debug;
 
-    public function __construct(Environment $twig, Disqus $disqus, string $environment)
+    public function __construct(Environment $twig, Disqus $disqus, bool $debug)
     {
         $this->twig = $twig;
         $this->disqus = $disqus;
-        $this->environment = $environment;
+        $this->debug = $debug;
     }
 
     public function render($name, array $parameters = array(), $template = '@KnpDisqus/list.html.twig')
@@ -32,7 +33,7 @@ class DisqusHelper
         try {
             $content = $this->disqus->fetch($name, $parameters);
         } catch (\Exception $e) {
-            if ($this->environment == 'dev') {
+            if ($this->debug) {
                 $error = $e->getMessage();
             } else {
                 $error = 'Oops! Seems there are problem with access to disqus.com. Please refresh the page in a few minutes.';
