@@ -23,8 +23,6 @@ class DisqusClient implements DisqusClientInterface
     private $secretKey;
     private $debug;
 
-    private $shortname;
-
     private $id;
 
     private $options = [
@@ -51,11 +49,9 @@ class DisqusClient implements DisqusClientInterface
      */
     public function fetch(string $shortname, array $options, string $fetch = 'threads/listPosts'): array
     {
-        $this->shortname = $shortname;
-
         $options = $this->setOptions($options);
 
-        $url = $this->buildUrl($options, $fetch);
+        $url = $this->buildUrl($shortname, $options, $fetch);
 
         $content = $this->request($url);
 
@@ -106,7 +102,6 @@ class DisqusClient implements DisqusClientInterface
     {
         return [
             'id' => $this->id,
-            'shortname' => $this->shortname,
             'debug' => $this->debug,
             'api_key' => $this->apiKey,
         ];
@@ -136,7 +131,7 @@ class DisqusClient implements DisqusClientInterface
         return $sso;
     }
 
-    private function buildUrl(array $options, string $fetch, string $format = 'json'): string
+    private function buildUrl(string $shortname, array $options, string $fetch, string $format = 'json'): string
     {
         if (isset($options['identifier'])) {
             $this->id = [
@@ -162,7 +157,7 @@ class DisqusClient implements DisqusClientInterface
         $limit = isset($options['limit']) ? $options['limit'] : 25;
 
         // @todo this should be more based on API docs (many params for many different fetch routes)
-        return $fetch.'.'.$format.'?thread'.$id.'&forum='.$this->shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
+        return $fetch.'.'.$format.'?thread'.$id.'&forum='.$shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
     }
 
     private function setOptions(array $options): array

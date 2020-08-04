@@ -28,10 +28,10 @@ class DisqusHelper implements RuntimeExtensionInterface
         $this->debug = $debug;
     }
 
-    public function render($name, array $parameters = [], $template = '@KnpDisqus/list.html.twig')
+    public function render(string $shortname, array $parameters = [], $template = '@KnpDisqus/list.html.twig')
     {
         try {
-            $content = $this->disqus->fetch($name, $parameters);
+            $content = $this->disqus->fetch($shortname, $parameters);
         } catch (\Exception $e) {
             if ($this->debug) {
                 $error = $e->getMessage();
@@ -42,6 +42,7 @@ class DisqusHelper implements RuntimeExtensionInterface
 
         $sso = $this->disqus->getSsoParameters($parameters);
 
+        $parameters['shortname'] = $shortname;
         $parameters['error'] = $error ?? null;
         $parameters['content'] = $content ?? [];
         $parameters = $parameters + $this->disqus->getParameters();
