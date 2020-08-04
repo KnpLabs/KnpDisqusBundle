@@ -1,19 +1,19 @@
 <?php
 
 /*
-* This file is part of the KnpDisqusBundle package.
-*
-* (c) KnpLabs <hello@knplabs.com>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the KnpDisqusBundle package.
+ *
+ * (c) KnpLabs <hello@knplabs.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-namespace Knp\Bundle\DisqusBundle;
+namespace Knp\Bundle\DisqusBundle\Client;
 
 use Symfony\Component\HttpClient\HttpClient;
 
-class Disqus implements DisqusInterface
+class DisqusClient implements DisqusClientInterface
 {
     const DISQUS_API_BASE_URI = 'https://disqus.com/api/3.0/';
 
@@ -28,24 +28,27 @@ class Disqus implements DisqusInterface
     private $id;
 
     private $options = [
-        'since'   => null,
-        'cursor'  => null,
-        'query'   => null,
+        'since' => null,
+        'cursor' => null,
+        'query' => null,
         'include' => ['approved'],
-        'order'   => 'desc',
-        'limit'   => 100,
-        'debug'   => 0,
+        'order' => 'desc',
+        'limit' => 100,
+        'debug' => 0,
     ];
 
     public function __construct(string $apiKey, ?string $secretKey, bool $debug = true)
     {
         $this->httpClient = HttpClient::createForBaseUri(self::DISQUS_API_BASE_URI);
 
-        $this->apiKey    = $apiKey;
+        $this->apiKey = $apiKey;
         $this->secretKey = $secretKey;
-        $this->debug     = $debug;
+        $this->debug = $debug;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function fetch(string $shortname, array $options, string $fetch = 'threads/listPosts'): array
     {
         $this->shortname = $shortname;
@@ -57,13 +60,13 @@ class Disqus implements DisqusInterface
         $content = $this->request($url);
 
         // in case we got a bad response, fake some stuff
-        if (!is_array($content) || !isset($content['response'])) {
+        if (!\is_array($content) || !isset($content['response'])) {
             $content = ['response' => false];
         }
 
         /**
          * Huge temporary hack to make SSL possible. The cache URL breaks
-         * down into 2 cases:
+         * down into 2 cases:.
          *
          *  1) If the user does not have an avatar, then we get something
          *      like http://www.gravatar..., which ultimately redirects
@@ -81,12 +84,11 @@ class Disqus implements DisqusInterface
          * support https very well - we call their JS file via https, but
          * they still serve us a bunch of http images :/.
          */
-
-        if (is_array($content['response'])) {
+        if (\is_array($content['response'])) {
             foreach ($content['response'] as $key => $comment) {
                 if (isset($comment['author']['avatar']['cache'])) {
                     $cache = $comment['author']['avatar']['cache'];
-                    if (strpos($cache, 'http://www.gravatar.com/avatar.php') === 0) {
+                    if (0 === strpos($cache, 'http://www.gravatar.com/avatar.php')) {
                         // we have a default URL, which we need to rewrite so that it's possible to make it secure if needed
                         $content['response'][$key]['author']['avatar']['cache'] = 'http://mediacdn.disqus.com/1341862960/images/noavatar92.png';
                     }
@@ -100,10 +102,10 @@ class Disqus implements DisqusInterface
     public function getParameters(): array
     {
         return [
-            'id'         => $this->id,
-            'shortname'  => $this->shortname,
-            'debug'      => $this->debug,
-            'api_key'    => $this->apiKey
+            'id' => $this->id,
+            'shortname' => $this->shortname,
+            'debug' => $this->debug,
+            'api_key' => $this->apiKey,
         ];
     }
 
@@ -135,17 +137,17 @@ class Disqus implements DisqusInterface
     {
         if (isset($options['identifier'])) {
             $this->id = [
-                'identifier' => $options['identifier']
+                'identifier' => $options['identifier'],
             ];
             $id = ':ident='.$options['identifier'];
         } elseif (isset($options['link'])) {
             $this->id = [
-                'link' => $options['link']
+                'link' => $options['link'],
             ];
             $id = ':link='.$options['link'];
         } elseif (isset($options['id'])) {
             $this->id = [
-                'id' => $options['id']
+                'id' => $options['id'],
             ];
             $id = '='.$options['id'];
         }
@@ -162,7 +164,7 @@ class Disqus implements DisqusInterface
 
     private function setOptions(array $options): array
     {
-        if (isset($options['order']) && !in_array($options['order'], array('asc', 'desc'))) {
+        if (isset($options['order']) && !\in_array($options['order'], ['asc', 'desc'])) {
             throw new \InvalidArgumentException(sprintf('Unknown `order` value used (%s), allowed are: asc, desc', $options['order']));
         }
 
@@ -170,14 +172,14 @@ class Disqus implements DisqusInterface
             if (false !== strpos(',', $options['include'])) {
                 $options['include'] = explode(',', $options['include']);
             }
-            if (!is_array($options['include'])) {
-                $options['include'] = array($options['include']);
+            if (!\is_array($options['include'])) {
+                $options['include'] = [$options['include']];
             }
 
-            $allowedIncludes = array('unapproved', 'approved', 'spam', 'deleted', 'flagged', 'highlighted');
+            $allowedIncludes = ['unapproved', 'approved', 'spam', 'deleted', 'flagged', 'highlighted'];
             foreach ($options['include'] as $include) {
                 $include = trim($include);
-                if (!in_array($include, $allowedIncludes)) {
+                if (!\in_array($include, $allowedIncludes)) {
                     throw new \InvalidArgumentException(sprintf('Unknown `include` value used (%s), allowed are: %s', $include, implode(', ', $allowedIncludes)));
                 }
             }

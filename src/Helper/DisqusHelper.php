@@ -1,17 +1,17 @@
 <?php
 
 /*
-* This file is part of the KnpDisqusBundle package.
-*
-* (c) KnpLabs <hello@knplabs.com>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the KnpDisqusBundle package.
+ *
+ * (c) KnpLabs <hello@knplabs.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Knp\Bundle\DisqusBundle\Helper;
 
-use Knp\Bundle\DisqusBundle\Disqus;
+use Knp\Bundle\DisqusBundle\Client\DisqusClient;
 use Twig\Environment;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -21,14 +21,14 @@ class DisqusHelper implements RuntimeExtensionInterface
     private $disqus;
     private $debug;
 
-    public function __construct(Environment $twig, Disqus $disqus, bool $debug)
+    public function __construct(Environment $twig, DisqusClient $disqus, bool $debug)
     {
         $this->twig = $twig;
         $this->disqus = $disqus;
         $this->debug = $debug;
     }
 
-    public function render($name, array $parameters = array(), $template = '@KnpDisqus/list.html.twig')
+    public function render($name, array $parameters = [], $template = '@KnpDisqus/list.html.twig')
     {
         try {
             $content = $this->disqus->fetch($name, $parameters);
