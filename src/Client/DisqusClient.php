@@ -57,10 +57,7 @@ class DisqusClient implements DisqusClientInterface
 
         // in case we got a bad response, fake some stuff
         if (!\is_array($content) || !isset($content['response'])) {
-            throw new \RuntimeException(sprintf(
-                'Somehow we got bad response requesting thi url: "%s"',
-                $url
-            ));
+            throw new \RuntimeException(sprintf('Somehow we got bad response requesting thi url: "%s"', $url));
         }
 
         /**
