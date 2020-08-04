@@ -22,7 +22,7 @@ before_install:
 install: composer update
 
 before_script:
-    - ./vendor/bin/simple_phpunit install
+    - ./vendor/bin/simple-phpunit install
 
 script:
     - composer validate --strict --no-check-lock
