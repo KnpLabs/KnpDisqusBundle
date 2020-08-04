@@ -1,10 +1,13 @@
 # KnpDisqusBundle
 
-If you use [Disqus](http://disqus.com) on your website for comments, you know that it's no good for SEO − as the comments are loaded dynamically via javascript.
+If you use [Disqus](https://disqus.com) on your website for comments the
+comments are loaded dynamically via JavaScript, which could negatively
+impact SEO.
 
-This bundle will fetch the comments using Disqus API so that you can include them in your page… before replacing the comment `div` by the Disqus javascript widget.
+This bundle will fetch the comments using Disqus API so that you can include
+them on your page… before replacing the comment `div` by the Disqus JavaScript widget.
 
-This way you benefit from both the javascript widget and the robot friendly comments.
+This way you benefit from both the JavaScript widget and the robot-friendly comments.
 
 [![Build Status](https://travis-ci.org/KnpLabs/KnpDisqusBundle.png?branch=master)](https://travis-ci.org/KnpLabs/KnpDisqusBundle)
 
@@ -18,52 +21,25 @@ This way you benefit from both the javascript widget and the robot friendly comm
 
 With [composer](http://packagist.org), run:
 
-    php composer.phar require knplabs/knp-disqus-bundle:dev-master
+    composer require knplabs/knp-disqus-bundle
 
-Register the bundles in your `AppKernel`:
+If you're not using Symfony Flex, then you will also need to enable
+`Knp\Bundle\DisqusBundle\KnpDisqusBundle` in your `bundles.php` file.
 
-```php
-$bundles = array(
-    //...
-    new Knp\Bundle\DisqusBundle\KnpDisqusBundle(),
-    //...
-);
-```
-
-### SSO authentication (optional)
-
-If you want to manage authentication through [Disqus SSO](http://docs.disqus.com/developers/sso/) mechanism, you have to add the application secret key in the configuration and pass user information (id, username, email) which will compose the HMAC payload from it, as well as specific login/logout service information to the helper. Make sure to setup your Disqus forum to use SSO and allow for local domains (for development purposes). More details hereunder.
-
-## Configuration
-
-### config.yml
+Next, create a `config/packages/knp_disqus.yaml` file:
 
 ```yaml
+# config/packages/knp_disqus.yaml
 knp_disqus:
-    api_key: %knp_disqus.api_key%
-    secret_key: %knp_disqus.secret_key% # optional, for SSO auth only
-    forums:
-        lorem:
-            shortname: %knp_disqus.lorem.shortname%
-            cache: my_cache_for_lorem # cache template key, usage described below
-        ipsum:
-            shortname: %knp_disqus.ipsum.shortname%
-
-my_cache_for_lorem:
-    # If you setup up an cache, you should also configure cache provider, which will be used automatically
-    # ...
+    api_key: '%env(DISQUS_API_KEY)%'
 ```
 
-### parameters.yml
+And finally, configure the `DISQUS_API_KEY` in your `.env` or `.env.local` file:
 
-```yaml
-knp_disqus.api_key:    YOUR_PUBLIC_API_KEY
-knp_disqus.secret_key: YOUR_SECRET_API_KEY # optional, for SSO auth only
-# Insert your disqus shortname
-# it's the unique identifier for your website as registered on Disqus
-knp_disqus.lorem.shortname: "dolor-sid"
-# you can also register more than one forum
-knp_disqus.ipsum.shortname: "amet"
+```
+# .env
+
+DISQUS_API_KEY=ABC123
 ```
 
 ## Usage:
@@ -71,14 +47,61 @@ knp_disqus.ipsum.shortname: "amet"
 ### In your Twig template:
 
 ```jinja
-{{ knp_disqus_render('dolor-sid', {'identifier': '/december-2010/the-best-day-of-my-life/', 'limit': 10}) }}
+{{ knp_disqus_render('your_disqus_shortname', {'identifier': '/december-2010/the-best-day-of-my-life/', 'limit': 10}) }}
 ```
 
 You can also show comments for specific language:
 
 ```jinja
-{{ knp_disqus_render('amet', {'identifier': '/december-2010/the-best-day-of-my-life/', 'language': 'de_formal'}) }}
+{{ knp_disqus_render('your_disqus_shortname', {'identifier': '/december-2010/the-best-day-of-my-life/', 'language': 'de_formal'}) }}
 ```
+
+### Or in Controller:
+
+```php
+use Knp\Bundle\DisqusBundle\Client\DisqusClientInterface;
+
+public function somePage(DisqusClientInterface $disqusClient)
+{
+    // ...
+
+    $comments = $disqusClient->fetch('your_disqus_shortname', [
+        'identifier' => '/december-2010/the-best-day-of-my-life/',
+        'limit'      => 10, // Default limit is set to max. value for Disqus (100 entries)
+    //    'language'   => 'de_formal', // You can fetch comments only for specific language
+    ]);
+
+    return $this->render('articles/somePage.html.twig', [
+        'comments' => $comments,
+    ]);
+}
+```
+
+### Adding a Callback for New Comments
+
+If you want a JavaScript function to be called when a new comment is added
+(e.g. to trigger some Analytics), first, create a global JavaScript function
+somewhere (i.e. one that is attached to the `windows` object):
+
+```javascript
+window.onNewComment = function(comment) {
+    console.log(comment);
+}
+```
+
+Next, pass the function name when rendering:
+
+```jinja
+{{ knp_disqus_render('your_disqus_shortname', {
+    'identifier': '/december-2010/the-best-day-of-my-life/',
+    'limit': 10,
+    'newCommentCallbackFunctionName': 'onNewComment'
+}) }}
+```
+
+## SSO authentication (optional)
+
+If you want to manage authentication through [Disqus SSO](http://docs.disqus.com/developers/sso/) mechanism, you have to add the application secret key in the configuration and pass user information (id, username, email) which will compose the HMAC payload from it, as well as specific login/logout service information to the helper. Make sure to setup your Disqus forum to use SSO and allow for local domains (for development purposes).
 
 To use SSO auth, pass ``sso.user`` information in the parameters to tell Disqus which user is logged in. Pass a user with an empty ``id`` to force Disqus to logout user, respectively to tell Disqus no user is logged in through SSO. Add information regarding your SSO Authentication service (login/logout urls, icon, etc.) in the ``sso.service`` parameter. See [Disqus SSO documentation](http://docs.disqus.com/developers/sso/) for more information.
 
@@ -109,45 +132,13 @@ To use SSO auth, pass ``sso.user`` information in the parameters to tell Disqus 
 }}
 ```
 
-### Or in Controller:
+## Configuration
 
-```php
-public function myPageAction()
-{
-    // ...
-
-    $comments = $this->get('knp_disqus.request')->fetch('dolor-sid', array(
-        'identifier' => '/december-2010/the-best-day-of-my-life/',
-        'limit'      => 10, // Default limit is set to max. value for Disqus (100 entries)
-    //    'language'   => 'de_formal', // You can fetch comments only for specific language
-    ));
-
-    return $this->render('LoremIpsumBundle:Lorem:myPage.html.twig', array(
-        'comments' => $comments,
-    ));
-}
-```
-
-### Adding a Callback for New Comments
-
-If you want a JavaScript function to be called when a new comment is added
-(e.g. to trigger some Analytics), first, create a global JavaScript function
-somewhere (i.e. one that is attached to the `windows` object):
-
-```javascript
-window.onNewComment = function(comment) {
-    console.log(comment);
-}
-```
-
-Next, pass the function name when rendering:
-
-```jinja
-{{ knp_disqus_render('dolor-sid', {
-    'identifier': '/december-2010/the-best-day-of-my-life/',
-    'limit': 10,
-    'newCommentCallbackFunctionName': 'onNewComment'
-}) }}
+```yaml
+# config/packages/knp_disqus.yaml
+knp_disqus:
+    api_key: 'your-disqus-api-key'
+    secret_key: 'disqus-api-key' # optional, for SSO auth only
 ```
 
 Enjoy!
