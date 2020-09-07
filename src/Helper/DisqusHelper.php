@@ -11,7 +11,7 @@
 
 namespace Knp\Bundle\DisqusBundle\Helper;
 
-use Knp\Bundle\DisqusBundle\Client\DisqusClient;
+use Knp\Bundle\DisqusBundle\Client\DisqusClientInterface;
 use Twig\Environment;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -21,7 +21,7 @@ class DisqusHelper implements RuntimeExtensionInterface
     private $disqus;
     private $debug;
 
-    public function __construct(Environment $twig, DisqusClient $disqus, bool $debug)
+    public function __construct(Environment $twig, DisqusClientInterface $disqus, bool $debug)
     {
         $this->twig = $twig;
         $this->disqus = $disqus;
