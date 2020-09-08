@@ -63,15 +63,13 @@ final class DisqusConfig
 
     public function getTemplateParameters(string $shortname, array $parameters, array $content, ?string $error): array
     {
-        $sso = $this->getSsoParameters($parameters);
-
         $parameters['id'] = $parameters['id'] ?? $this->getThreadIdentifierParam($parameters);
         $parameters['api_key'] = $parameters['api_key'] ?? $this->getApiKey();
         $parameters['debug'] = $parameters['debug'] ?? $this->isDebug();
         $parameters['shortname'] = $shortname;
         $parameters['error'] = $error;
         $parameters['content'] = $content;
-        $parameters['sso'] = $sso;
+        $parameters['sso'] = $this->getSsoParameters($parameters);;
 
         return $parameters;
     }
