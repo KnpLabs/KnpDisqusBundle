@@ -11,19 +11,13 @@
 
 namespace Knp\Bundle\DisqusBundle\Client;
 
+use Knp\Bundle\DisqusBundle\Model\DisqusConfig;
 use Symfony\Component\HttpClient\HttpClient;
 
 class DisqusClient implements DisqusClientInterface
 {
-    const DISQUS_API_BASE_URI = 'https://disqus.com/api/3.0/';
-
+    private $config;
     private $httpClient;
-
-    private $apiKey;
-    private $secretKey;
-    private $debug;
-
-    private $id;
 
     private $options = [
         'since' => null,
@@ -35,13 +29,10 @@ class DisqusClient implements DisqusClientInterface
         'debug' => 0,
     ];
 
-    public function __construct(string $apiKey, ?string $secretKey, bool $debug = true)
+    public function __construct(DisqusConfig $config)
     {
-        $this->httpClient = HttpClient::createForBaseUri(self::DISQUS_API_BASE_URI);
-
-        $this->apiKey = $apiKey;
-        $this->secretKey = $secretKey;
-        $this->debug = $debug;
+        $this->config = $config;
+        $this->httpClient = HttpClient::createForBaseUri(DisqusConfig::DISQUS_API_BASE_URI);
     }
 
     /**
@@ -95,66 +86,19 @@ class DisqusClient implements DisqusClientInterface
         return $content;
     }
 
-    public function getParameters(): array
-    {
-        return [
-            'id' => $this->id,
-            'debug' => $this->debug,
-            'api_key' => $this->apiKey,
-        ];
-    }
-
-    public function getSsoParameters(array $parameters): array
-    {
-        $sso = [];
-
-        if ($this->secretKey && isset($parameters['sso']) && isset($parameters['sso']['user'])) {
-            $sso = $parameters['sso'];
-
-            if (isset($sso['user'])) {
-                $message = base64_encode(json_encode($sso['user']));
-                $timestamp = time();
-                $hmac = hash_hmac('sha1', "$message $timestamp", $this->secretKey);
-
-                unset($sso['user']);
-                $sso['auth'] = [
-                    'message' => $message,
-                    'hmac' => $hmac,
-                    'timestamp' => $timestamp,
-                ];
-            }
-        }
-
-        return $sso;
-    }
-
     private function buildUrl(string $shortname, array $options, string $fetch, string $format = 'json'): string
     {
-        if (isset($options['identifier'])) {
-            $this->id = [
-                'identifier' => $options['identifier'],
-            ];
-            $id = ':ident='.$options['identifier'];
-        } elseif (isset($options['link'])) {
-            $this->id = [
-                'link' => $options['link'],
-            ];
-            $id = ':link='.$options['link'];
-        } elseif (isset($options['id'])) {
-            $this->id = [
-                'id' => $options['id'],
-            ];
-            $id = '='.$options['id'];
-        }
-
-        if (!isset($id)) {
-            throw new \InvalidArgumentException('You need to give an id.');
-        }
-
-        $limit = isset($options['limit']) ? $options['limit'] : 25;
-
         // @todo this should be more based on API docs (many params for many different fetch routes)
-        return $fetch.'.'.$format.'?thread'.$id.'&forum='.$shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
+        //$fetch.'.'.$format.'?thread'.$id.'&forum='.$shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
+        return sprintf(
+            '%s.%s?%s&forum%s&api_key=%s&limit=%s',
+            $fetch,
+            $format,
+            $this->config->getThreadIdentifierParam($options, true),
+            $shortname,
+            $this->config->getApiKey(),
+            $options['limit'] ?? 25
+        );
     }
 
     private function setOptions(array $options): array

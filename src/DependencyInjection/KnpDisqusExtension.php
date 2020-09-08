@@ -26,7 +26,7 @@ class KnpDisqusExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $definition = $container->getDefinition('knp_disqus.disqus_client');
+        $definition = $container->getDefinition('knp_disqus.config');
         $definition->replaceArgument(0, $config['api_key']);
         $definition->replaceArgument(1, $config['secret_key']);
     }
