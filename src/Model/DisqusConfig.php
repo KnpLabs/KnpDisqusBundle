@@ -22,18 +22,11 @@ final class DisqusConfig
     private $secretKey;
     private $debug;
 
-    private $id;
-
     public function __construct(string $apiKey, ?string $secretKey, bool $debug)
     {
         $this->apiKey = $apiKey;
         $this->secretKey = $secretKey;
         $this->debug = $debug;
-    }
-
-    public function setId(array $id): void
-    {
-        $this->id = $id;
     }
 
     public function getApiKey(): string
@@ -46,16 +39,44 @@ final class DisqusConfig
         return $this->debug;
     }
 
-    public function getParameters(): array
+    /**
+     * @return array|string
+     */
+    public function getThreadIdentifierParam(array $options, bool $asQueryParam = false)
     {
-        return [
-            'id' => $this->id,
-            'debug' => $this->debug,
-            'api_key' => $this->apiKey,
-        ];
+        if (\array_key_exists('identifier', $options)) {
+            return $asQueryParam
+                ? 'thread:ident='.$options['identifier']
+                : ['identifier' => $options['identifier']];
+        } elseif (\array_key_exists('link', $options)) {
+            return $asQueryParam
+                ? 'thread:link='.$options['link']
+                : ['link' => $options['link']];
+        } elseif (\array_key_exists('id', $options)) {
+            return $asQueryParam
+                ? 'thread='.$options['id']
+                : ['id' => $options['id']];
+        }
+
+        throw new \InvalidArgumentException('You need to give an id.');
     }
 
-    public function getSsoParameters(array $parameters): array
+    public function getTemplateParameters(string $shortname, array $parameters, array $content, ?string $error): array
+    {
+        $sso = $this->getSsoParameters($parameters);
+
+        $parameters['id'] = $parameters['id'] ?? $this->getThreadIdentifierParam($parameters);
+        $parameters['api_key'] = $parameters['api_key'] ?? $this->getApiKey();
+        $parameters['debug'] = $parameters['debug'] ?? $this->isDebug();
+        $parameters['shortname'] = $shortname;
+        $parameters['error'] = $error;
+        $parameters['content'] = $content;
+        $parameters['sso'] = $sso;
+
+        return $parameters;
+    }
+
+    private function getSsoParameters(array $parameters): array
     {
         $sso = [];
 

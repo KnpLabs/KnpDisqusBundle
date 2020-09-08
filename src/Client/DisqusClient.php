@@ -88,34 +88,13 @@ class DisqusClient implements DisqusClientInterface
 
     private function buildUrl(string $shortname, array $options, string $fetch, string $format = 'json'): string
     {
-        if (isset($options['identifier'])) {
-            $this->config->setId([
-                'identifier' => $options['identifier'],
-            ]);
-            $id = ':ident='.$options['identifier'];
-        } elseif (isset($options['link'])) {
-            $this->config->setId([
-                'link' => $options['link'],
-            ]);
-            $id = ':link='.$options['link'];
-        } elseif (isset($options['id'])) {
-            $this->config->setId([
-                'id' => $options['id'],
-            ]);
-            $id = '='.$options['id'];
-        }
-
-        if (!isset($id)) {
-            throw new \InvalidArgumentException('You need to give an id.');
-        }
-
         // @todo this should be more based on API docs (many params for many different fetch routes)
         //$fetch.'.'.$format.'?thread'.$id.'&forum='.$shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
         return sprintf(
-            '%s.%s?thread%s&forum%s&api_key=%s&limit=%s',
+            '%s.%s?%s&forum%s&api_key=%s&limit=%s',
             $fetch,
             $format,
-            $id,
+            $this->config->getThreadIdentifierParam($options, true),
             $shortname,
             $this->config->getApiKey(),
             $options['limit'] ?? 25

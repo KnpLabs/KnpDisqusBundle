@@ -41,14 +41,14 @@ class DisqusHelper implements RuntimeExtensionInterface
             }
         }
 
-        $sso = $this->config->getSsoParameters($parameters);
-
-        $parameters['shortname'] = $shortname;
-        $parameters['error'] = $error ?? null;
-        $parameters['content'] = $content ?? [];
-        $parameters = $parameters + $this->config->getParameters();
-        $parameters['sso'] = $sso;
-
-        return $this->twig->render($template, $parameters);
+        return $this->twig->render(
+            $template,
+            $this->config->getTemplateParameters(
+                $shortname,
+                $parameters,
+                $content ?? [],
+                $error ?? null
+            )
+        );
     }
 }
