@@ -69,7 +69,7 @@ final class DisqusConfig
         $parameters['shortname'] = $shortname;
         $parameters['error'] = $error;
         $parameters['content'] = $content;
-        $parameters['sso'] = $this->getSsoParameters($parameters);;
+        $parameters['sso'] = $this->getSsoParameters($parameters);
 
         return $parameters;
     }
