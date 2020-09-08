@@ -20,6 +20,11 @@
             <argument type="service" id="twig"/>
             <argument type="service" id="knp_disqus.disqus_config"/>
             <argument type="service" id="knp_disqus.disqus_client"/>
+            <tag name="twig.runtime" />
+        </service>
+
+        <service id="Knp\Bundle\DisqusBundle\Twig\Extension\DisqusExtension">
+            <tag name="twig.extension" />
         </service>
     </services>
 </container>
