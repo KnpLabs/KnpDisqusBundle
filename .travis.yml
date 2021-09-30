@@ -13,8 +13,8 @@ env:
 
 php:
     - 7.2
-    - 7.3
     - 7.4
+    - 8.0
 
 before_install:
     - find ~/.phpenv -name xdebug.ini -delete
