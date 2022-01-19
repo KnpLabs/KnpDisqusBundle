@@ -18,21 +18,33 @@ parameters:
             path: src/DependencyInjection/Configuration.php
         -
             message: "#return type has no value type specified in iterable type array\\.$#"
-            count: 3
+            count: 1
             path: src/Client/DisqusClientInterface.php
         -
-            message: "#has parameter (\\$options|\\$parameters) with no value type specified in iterable type array\\.$#"
-            count: 2
+            message: "#has parameter \\$options with no value type specified in iterable type array\\.$#"
+            count: 1
             path: src/Client/DisqusClientInterface.php
         -
             message: "#type has no value type specified in iterable type array\\.$#"
-            count: 7
-            path: src/Client/DisqusClient.php
-        -
-            message: "#has parameter (\\$options|\\$parameters) with no value type specified in iterable type array\\.$#"
             count: 4
             path: src/Client/DisqusClient.php
         -
-            message: "#\\$string of function base64_encode expects string, string|false given\\.$#"
+            message: "#has parameter (\\$options|\\$parameters) with no value type specified in iterable type array\\.$#"
+            count: 3
+            path: src/Client/DisqusClient.php
+        -
+            message: "#values of function sprintf expects bool\\\\|float\\\\|int\\\\|string\\\\|null, array\\\\|string given\\.$#"
             count: 1
             path: src/Client/DisqusClient.php
+        -
+            message: "#return type has no value type specified in iterable type array\\.$#"
+            count: 3
+            path: src/Model/DisqusConfig.php
+        -
+            message: "#\\$string of function base64_encode expects string, string|false given\\.$#"
+            count: 1
+            path: src/Model/DisqusConfig.php
+        -
+            message: "#has parameter \\$(content|parameters|options) with no value type specified in iterable type array\\.$#"
+            count: 4
+            path: src/Model/DisqusConfig.php

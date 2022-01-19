@@ -20,8 +20,4 @@ interface DisqusClientInterface
      * @return array the JSON-decoded data from whatever Disqus endpoint that was fetched
      */
     public function fetch(string $shortname, array $options, string $fetch = 'threads/listPosts'): array;
-
-    public function getSsoParameters(array $parameters): array;
-
-    public function getParameters(): array;
 }

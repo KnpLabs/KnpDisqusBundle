@@ -22,7 +22,13 @@ class DisqusHelper implements RuntimeExtensionInterface
      * @var Environment
      */
     private $twig;
+    /**
+     * @var DisqusConfig
+     */
     private $config;
+    /**
+     * @var DisqusClientInterface
+     */
     private $disqus;
 
     public function __construct(Environment $twig, DisqusConfig $config, DisqusClientInterface $disqus)

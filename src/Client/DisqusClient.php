@@ -22,9 +22,18 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DisqusClient implements DisqusClientInterface
 {
+    /**
+     * @var DisqusConfig
+     */
     private $config;
+    /**
+     * @var HttpClientInterface
+     */
     private $httpClient;
 
+    /**
+     * @var array
+     */
     private $options = [
         'since' => null,
         'cursor' => null,
