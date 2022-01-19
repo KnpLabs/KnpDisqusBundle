@@ -3,7 +3,7 @@
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit colors="true" bootstrap="vendor/autoload.php">
     <testsuites>
-        <testsuite name="KnpPaginatorBundle Test Suite">
+        <testsuite name="Test Suite">
             <directory suffix="Test.php">./tests/</directory>
         </testsuite>
     </testsuites>
