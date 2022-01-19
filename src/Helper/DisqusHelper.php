@@ -18,8 +18,17 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 class DisqusHelper implements RuntimeExtensionInterface
 {
+    /**
+     * @var Environment
+     */
     private $twig;
+    /**
+     * @var DisqusConfig
+     */
     private $config;
+    /**
+     * @var DisqusClientInterface
+     */
     private $disqus;
 
     public function __construct(Environment $twig, DisqusConfig $config, DisqusClientInterface $disqus)
@@ -29,7 +38,7 @@ class DisqusHelper implements RuntimeExtensionInterface
         $this->disqus = $disqus;
     }
 
-    public function render(string $shortname, array $parameters = [], $template = '@KnpDisqus/list.html.twig')
+    public function render(string $shortname, array $parameters = [], string $template = '@KnpDisqus/list.html.twig'): string
     {
         try {
             $content = $this->disqus->fetch($shortname, $parameters);

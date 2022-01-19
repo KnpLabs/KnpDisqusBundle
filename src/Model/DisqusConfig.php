@@ -16,10 +16,19 @@ namespace Knp\Bundle\DisqusBundle\Model;
  */
 final class DisqusConfig
 {
-    const DISQUS_API_BASE_URI = 'https://disqus.com/api/3.0/';
+    public const DISQUS_API_BASE_URI = 'https://disqus.com/api/3.0/';
 
+    /**
+     * @var string
+     */
     private $apiKey;
+    /**
+     * @var string|null
+     */
     private $secretKey;
+    /**
+     * @var bool
+     */
     private $debug;
 
     public function __construct(string $apiKey, ?string $secretKey, bool $debug)
@@ -48,11 +57,15 @@ final class DisqusConfig
             return $asQueryParam
                 ? 'thread:ident='.$options['identifier']
                 : ['identifier' => $options['identifier']];
-        } elseif (\array_key_exists('link', $options)) {
+        }
+
+        if (\array_key_exists('link', $options)) {
             return $asQueryParam
                 ? 'thread:link='.$options['link']
                 : ['link' => $options['link']];
-        } elseif (\array_key_exists('id', $options)) {
+        }
+
+        if (\array_key_exists('id', $options)) {
             return $asQueryParam
                 ? 'thread='.$options['id']
                 : ['id' => $options['id']];

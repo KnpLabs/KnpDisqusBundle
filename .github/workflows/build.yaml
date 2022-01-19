@@ -1,0 +1,66 @@
+name: Build
+
+on:
+    pull_request: ~
+    push: ~
+
+jobs:
+    phpstan:
+        runs-on: ubuntu-20.04
+        name: PHPStan
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: PHPStan
+              uses: docker://oskarstark/phpstan-ga
+              env:
+                  REQUIRE_DEV: true
+              with:
+                  args: analyse
+    cs-fixer:
+        runs-on: ubuntu-20.04
+        name: PHP-CS-Fixer
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Fix CS
+              uses: docker://oskarstark/php-cs-fixer-ga
+    tests:
+        runs-on: ubuntu-20.04
+        strategy:
+            matrix:
+                php:
+                    - '7.3'
+                    - '7.4'
+                    - '8.0'
+                include:
+                    - description: 'Symfony 4.4'
+                      php: '7.3'
+                      composer_option: '--prefer-lowest'
+                    - description: 'Symfony 5.3'
+                      php: '7.4'
+                      symfony: 5.3.*
+                    - description: 'Symfony 6.0'
+                      php: '8.0'
+                      symfony: 6.0.*-dev
+        name: PHP ${{ matrix.php }} tests (${{ matrix.description }})
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Cache
+              uses: actions/cache@v2
+              with:
+                  path: ~/.composer/cache/files
+                  key: ${{ matrix.php }}-${{ matrix.symfony }}-${{ matrix.composer_option }}
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+            - run: |
+                  sed -ri 's/"symfony\/(.+)": "(.+)"/"symfony\/\1": "'${{ matrix.symfony }}'"/' composer.json;
+              if: contains(matrix.symfony, '-dev')
+            - run: composer config minimum-stability dev
+            - run: composer config prefer-stable true
+              if: matrix.symfony
+            - run: composer update --no-interaction --no-progress --ansi ${{ matrix.composer_option }}
+            - run: vendor/bin/simple-phpunit

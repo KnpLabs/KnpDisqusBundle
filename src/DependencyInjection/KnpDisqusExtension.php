@@ -18,9 +18,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class KnpDisqusExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__).'/Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(\dirname(__DIR__, 2).'/config'));
         $loader->load('services.xml');
 
         $configuration = $this->getConfiguration($configs, $container);

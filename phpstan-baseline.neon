@@ -1,0 +1,50 @@
+parameters:
+    ignoreErrors:
+        -
+            message: "#has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+            count: 1
+            path: src/Helper/DisqusHelper.php
+        -
+            message: "#has parameter \\$configs with no value type specified in iterable type array\\.$#"
+            count: 1
+            path: src/DependencyInjection/KnpDisqusExtension.php
+        -
+            message: "#Symfony\\Component\\Config\\Definition\\ConfigurationInterface|null given\\.$#"
+            count: 1
+            path: src/DependencyInjection/KnpDisqusExtension.php
+        -
+            message: "#Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeDefinition::children\\(\\)\\.$#"
+            count: 1
+            path: src/DependencyInjection/Configuration.php
+        -
+            message: "#return type has no value type specified in iterable type array\\.$#"
+            count: 1
+            path: src/Client/DisqusClientInterface.php
+        -
+            message: "#has parameter \\$options with no value type specified in iterable type array\\.$#"
+            count: 1
+            path: src/Client/DisqusClientInterface.php
+        -
+            message: "#type has no value type specified in iterable type array\\.$#"
+            count: 4
+            path: src/Client/DisqusClient.php
+        -
+            message: "#has parameter (\\$options|\\$parameters) with no value type specified in iterable type array\\.$#"
+            count: 3
+            path: src/Client/DisqusClient.php
+        -
+            message: "#values of function sprintf expects bool\\\\|float\\\\|int\\\\|string\\\\|null, array\\\\|string given\\.$#"
+            count: 1
+            path: src/Client/DisqusClient.php
+        -
+            message: "#return type has no value type specified in iterable type array\\.$#"
+            count: 3
+            path: src/Model/DisqusConfig.php
+        -
+            message: "#\\$string of function base64_encode expects string, string|false given\\.$#"
+            count: 1
+            path: src/Model/DisqusConfig.php
+        -
+            message: "#has parameter \\$(content|parameters|options) with no value type specified in iterable type array\\.$#"
+            count: 4
+            path: src/Model/DisqusConfig.php

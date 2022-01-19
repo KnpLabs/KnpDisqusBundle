@@ -13,12 +13,27 @@ namespace Knp\Bundle\DisqusBundle\Client;
 
 use Knp\Bundle\DisqusBundle\Model\DisqusConfig;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DisqusClient implements DisqusClientInterface
 {
+    /**
+     * @var DisqusConfig
+     */
     private $config;
+    /**
+     * @var HttpClientInterface
+     */
     private $httpClient;
 
+    /**
+     * @var array
+     */
     private $options = [
         'since' => null,
         'cursor' => null,
@@ -134,10 +149,15 @@ class DisqusClient implements DisqusClientInterface
         return array_merge($this->options, $options);
     }
 
-    private function request(string $url, string $method = 'GET'): ?array
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    private function request(string $url, string $method = 'GET'): array
     {
-        $response = $this->httpClient->request($method, $url);
-
-        return $response->toArray();
+        return $this->httpClient->request($method, $url)->toArray();
     }
 }
