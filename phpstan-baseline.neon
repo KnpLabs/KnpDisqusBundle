@@ -1,0 +1,38 @@
+parameters:
+    ignoreErrors:
+        -
+            message: "#has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+            count: 1
+            path: src/Helper/DisqusHelper.php
+        -
+            message: "#has parameter \\$configs with no value type specified in iterable type array\\.$#"
+            count: 1
+            path: src/DependencyInjection/KnpDisqusExtension.php
+        -
+            message: "#Symfony\\Component\\Config\\Definition\\ConfigurationInterface|null given\\.$#"
+            count: 1
+            path: src/DependencyInjection/KnpDisqusExtension.php
+        -
+            message: "#Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeDefinition::children\\(\\)\\.$#"
+            count: 1
+            path: src/DependencyInjection/Configuration.php
+        -
+            message: "#return type has no value type specified in iterable type array\\.$#"
+            count: 3
+            path: src/Client/DisqusClientInterface.php
+        -
+            message: "#has parameter (\\$options|\\$parameters) with no value type specified in iterable type array\\.$#"
+            count: 2
+            path: src/Client/DisqusClientInterface.php
+        -
+            message: "#type has no value type specified in iterable type array\\.$#"
+            count: 7
+            path: src/Client/DisqusClient.php
+        -
+            message: "#has parameter (\\$options|\\$parameters) with no value type specified in iterable type array\\.$#"
+            count: 4
+            path: src/Client/DisqusClient.php
+        -
+            message: "#\\$string of function base64_encode expects string, string|false given\\.$#"
+            count: 1
+            path: src/Client/DisqusClient.php

@@ -41,7 +41,7 @@ class KnpDisqusBundleTestKernel extends Kernel
         ];
     }
 
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         if (null === $this->builder) {
             $this->builder = new ContainerBuilder();
@@ -64,12 +64,12 @@ class KnpDisqusBundleTestKernel extends Kernel
         });
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return sys_get_temp_dir().'/cache'.spl_object_hash($this);
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return sys_get_temp_dir().'/logs'.spl_object_hash($this);
     }

@@ -12,19 +12,43 @@
 namespace Knp\Bundle\DisqusBundle\Client;
 
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DisqusClient implements DisqusClientInterface
 {
-    const DISQUS_API_BASE_URI = 'https://disqus.com/api/3.0/';
+    public const DISQUS_API_BASE_URI = 'https://disqus.com/api/3.0/';
 
+    /**
+     * @var HttpClientInterface
+     */
     private $httpClient;
 
+    /**
+     * @var string
+     */
     private $apiKey;
+    /**
+     * @var string|null
+     */
     private $secretKey;
+    /**
+     * @var bool
+     */
     private $debug;
 
+    /**
+     * @var array
+     */
     private $id;
 
+    /**
+     * @var array
+     */
     private $options = [
         'since' => null,
         'cursor' => null,
@@ -151,7 +175,7 @@ class DisqusClient implements DisqusClientInterface
             throw new \InvalidArgumentException('You need to give an id.');
         }
 
-        $limit = isset($options['limit']) ? $options['limit'] : 25;
+        $limit = $options['limit'] ?? 25;
 
         // @todo this should be more based on API docs (many params for many different fetch routes)
         return $fetch.'.'.$format.'?thread'.$id.'&forum='.$shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
@@ -190,10 +214,15 @@ class DisqusClient implements DisqusClientInterface
         return array_merge($this->options, $options);
     }
 
-    private function request(string $url, string $method = 'GET'): ?array
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    private function request(string $url, string $method = 'GET'): array
     {
-        $response = $this->httpClient->request($method, $url);
-
-        return $response->toArray();
+        return $this->httpClient->request($method, $url)->toArray();
     }
 }
