@@ -52,6 +52,12 @@ class KnpDisqusBundleTestKernel extends Kernel
         $loader->load(function (ContainerBuilder $container) use ($builder) {
             $container->merge($builder);
             $container->loadFromExtension(
+                'framework',
+                [
+                    'secret' => 'foo'
+                ]
+            );
+            $container->loadFromExtension(
                 'knp_disqus',
                 [
                     'api_key' => 'foo',
