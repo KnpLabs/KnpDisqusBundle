@@ -12,6 +12,7 @@
 namespace Knp\Bundle\DisqusBundle\Helper;
 
 use Knp\Bundle\DisqusBundle\Client\DisqusClientInterface;
+use Knp\Bundle\DisqusBundle\Model\DisqusConfig;
 use Twig\Environment;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -21,20 +22,14 @@ class DisqusHelper implements RuntimeExtensionInterface
      * @var Environment
      */
     private $twig;
-    /**
-     * @var DisqusClientInterface
-     */
+    private $config;
     private $disqus;
-    /**
-     * @var bool
-     */
-    private $debug;
 
-    public function __construct(Environment $twig, DisqusClientInterface $disqus, bool $debug)
+    public function __construct(Environment $twig, DisqusConfig $config, DisqusClientInterface $disqus)
     {
         $this->twig = $twig;
+        $this->config = $config;
         $this->disqus = $disqus;
-        $this->debug = $debug;
     }
 
     public function render(string $shortname, array $parameters = [], string $template = '@KnpDisqus/list.html.twig'): string
@@ -42,21 +37,21 @@ class DisqusHelper implements RuntimeExtensionInterface
         try {
             $content = $this->disqus->fetch($shortname, $parameters);
         } catch (\Exception $e) {
-            if ($this->debug) {
+            if ($this->config->isDebug()) {
                 $error = $e->getMessage();
             } else {
                 $error = 'Oops! Seems there are problem with access to disqus.com. Please refresh the page in a few minutes.';
             }
         }
 
-        $sso = $this->disqus->getSsoParameters($parameters);
-
-        $parameters['shortname'] = $shortname;
-        $parameters['error'] = $error ?? null;
-        $parameters['content'] = $content ?? [];
-        $parameters = $parameters + $this->disqus->getParameters();
-        $parameters['sso'] = $sso;
-
-        return $this->twig->render($template, $parameters);
+        return $this->twig->render(
+            $template,
+            $this->config->getTemplateParameters(
+                $shortname,
+                $parameters,
+                $content ?? [],
+                $error ?? null
+            )
+        );
     }
 }
