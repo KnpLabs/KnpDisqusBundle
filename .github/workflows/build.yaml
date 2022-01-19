@@ -63,4 +63,4 @@ jobs:
             - run: composer config prefer-stable true
               if: matrix.symfony
             - run: composer update --no-interaction --no-progress --ansi ${{ matrix.composer_option }}
-            - run: vendor/bin/phpunit
+            - run: vendor/bin/simple-phpunit

@@ -20,13 +20,13 @@
     "require": {
         "php": ">=7.2.5",
         "ext-json": "*",
-        "symfony/http-client": "^4.4 || ^5.3 || ^6.0"
+        "symfony/http-client": "^4.4 || ^5.0 || ^6.0"
     },
 
     "require-dev": {
         "phpstan/phpstan": "^1.2",
-        "phpunit/phpunit": "^8.5 || ^9.5",
-        "symfony/framework-bundle": "^4.4 || ^5.3 || ^6.0",
+        "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
+        "symfony/phpunit-bridge": "^5.0 | ^6.0",
         "twig/twig": "^2.10|^3.0"
     },
 
@@ -35,10 +35,6 @@
     },
     "autoload-dev": {
         "psr-4": { "Knp\\Bundle\\DisqusBundle\\Tests\\": "tests/" }
-    },
-
-    "scripts": {
-        "test": "vendor/bin/phpunit"
     },
 
     "extra": {
