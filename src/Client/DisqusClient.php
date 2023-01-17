@@ -106,7 +106,7 @@ class DisqusClient implements DisqusClientInterface
         // @todo this should be more based on API docs (many params for many different fetch routes)
         //$fetch.'.'.$format.'?thread'.$id.'&forum='.$shortname.'&api_key='.$this->apiKey.'&limit='.$limit;
         return sprintf(
-            '%s.%s?%s&forum%s&api_key=%s&limit=%s',
+            '%s.%s?%s&forum=%s&api_key=%s&limit=%s',
             $fetch,
             $format,
             $this->config->getThreadIdentifierParam($options, true),
